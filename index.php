@@ -1,9 +1,16 @@
 <?php
-//set api key
-$apiKey = strtoupper( ( isset( $_GET[ 'apiKey' ] ) ) ? $_GET[ 'apiKey' ] : '' );
 
-if( !$apiKey )
-    throw new \Exception( 'Puu.sh api key must be provided' );
+//set the output type
+$output = 'file';
+
+if( isset( $output ) && $output == 'file' )
+{
+    //set api key
+    $apiKey = strtoupper( ( isset( $_GET[ 'apiKey' ] ) ) ? $_GET[ 'apiKey' ] : '' );
+
+    if( !$apiKey )
+        throw new \Exception( 'Puu.sh api key must be provided' );
+}
 
 //caption to write on the image
 $caption = strtoupper( ( isset( $_GET[ 'caption' ] ) ) ? $_GET[ 'caption' ] : '' );
@@ -24,20 +31,13 @@ list( $w, $h ) = getimagesize( $img );
 if( $w == 0 || $h == 0 )
     throw new \Exception( 'Could not load image: ' . $img );
 
-//set the max and min font sizes
-$maxFont = 72;
-$minFont = 36;
-
-//initially the font size is the max
-$fontSize = $maxFont;
-
 //create the base image
 $image = new Imagick( $img );
 
 $draw = new ImagickDraw();
 //set the font
 $draw->setFont( './impact.ttf' );
-$draw->setFontSize( $fontSize );
+$draw->setFontSize( 72 );
 //set stroke colour to black
 $draw->setStrokeColor( new ImagickPixel( "#000000" ) );
 $draw->setStrokeAntialias( true );
@@ -48,36 +48,19 @@ $draw->setGravity( Imagick::GRAVITY_NORTH );
 //set alignment to center
 $draw->setTextAlignment( 2 );
 
-//make sure text is no wider than 94% of image size
-$imgSize  = $image->getImageGeometry();
-$maxWidth = intval( $imgSize[ 'width' ] * .94 );
+$fontSize = 0;
+$rows     = 1;
 
-//get the font metrics for the initial caption
-$metrics = $image->queryFontMetrics( $draw, $caption );
-//determine the font ratio and the width ratio
-$fontRatio = $fontSize / $minFont;
-$textRatio = $metrics[ 'textWidth' ] / $maxWidth;
+$imgSize          = $image->getImageGeometry();
+$textDesiredWidth = intval( $imgSize[ 'width' ] * .90 );
 
-// if the textWidth/maxLength ratio is greater than the font ratio split the text
-if( $textRatio > $fontRatio )
-{
-    $wrapLength = intval( strlen( $caption ) * .55 );
-    $caption    = wordwrap( $caption, $wrapLength, "\n", true );
+list( $fontSize, $caption ) = getFontSize( $image, $draw, $caption );
 
-    // make it a bit smaller since it will be multiline
-    $fontSize = floor( $fontSize * .8 );
-    $draw->setFontSize( $fontSize );
-    //get new metrics
-    $metrics = $image->queryFontMetrics( $draw, $caption );
-}
-
-// See if additional shrinking is needed
-$textRatio = $metrics[ 'textWidth' ] / $maxWidth;
-if( $textRatio > 1 )
-    $fontSize = floor( $fontSize * ( 1 / $textRatio ) );
+$draw->setFontSize( $fontSize );
+$captionRows = substr_count( $caption, "\n" ) + 1;
 
 //set stroke based on font size
-$strokeWidth = (int) max( array( 1, ceil( $fontSize / 12 ) ) );
+$strokeWidth = (int) min( array( 2, ceil( $fontSize / 12 ) ) );
 $draw->setStrokeWidth( $strokeWidth );
 
 //set the new font size
@@ -99,7 +82,7 @@ switch( $location )
         break;
     case 'bottom':
     default:
-        $yPos = $h - ( 20 * ( $maxFont / $fontSize ) );
+        $yPos = $h - ( $fontSize * $captionRows ) - 10;
         break;
 }
 
@@ -113,20 +96,89 @@ $draw->setStrokeAlpha( 0 );
 
 //re-write the text on the image
 $image->annotateImage( $draw, $xPos, $yPos, 0, $caption );
-
-$filename = '/tmp/' . microtime( true ) . '.jpg';
-
-//finally output the image
 $image->setImageFormat( "jpg" );
 $image->setCompression( Imagick::COMPRESSION_JPEG );
 $image->setCompressionQuality( 70 );
-$image->writeimage( $filename );
 
-echo uploadImage( $filename, $apiKey );
+if( isset( $output ) && $output == 'file' )
+{
+    $filename = '/tmp/' . microtime( true ) . '.jpg';
 
-//remove the file
-unlink( $filename );
+    //finally output the image
+    $image->writeimage( $filename );
 
+    echo json_encode( array( 'url' => uploadImage( $filename, $apiKey ) ) );
+
+    //remove the file
+    unlink( $filename );
+}
+else
+{
+    header( 'Content-type: image/jpg' );
+    echo $image;
+}
+
+/**
+ * @param Imagick     $image
+ * @param ImagickDraw $draw
+ * @param             $caption
+ *
+ * @return int
+ */
+function getFontSize( Imagick $image, ImagickDraw $draw, $caption, $rows = 1 )
+{
+    // Create an array for the textwidth and textheight
+    $textProperties = array( 'textWidth' => 0 );
+
+    //make sure text is no wider than 94% of image size
+    $imgSize          = $image->getImageGeometry();
+    $textDesiredWidth = intval( $imgSize[ 'width' ] * .88 );
+
+    //set the max and min font sizes based on the height and string length
+    $maxFont = floor( $imgSize[ 'height' ] * .065 );
+    $minFont = floor( $imgSize[ 'height' ] * .045 ) * ( min( 1, ( $imgSize[ 'height' ] * .33 ) / strlen( $caption ) ) );
+
+    // Set an initial value for the fontsize, will be increased in the loop below
+    $fontSize = 0;
+
+    // Increase the fontsize until we have reached our desired width
+    while( $textProperties[ 'textWidth' ] <= $textDesiredWidth )
+    {
+        $draw->setFontSize( $fontSize );
+        $textProperties = $image->queryFontMetrics( $draw, $caption );
+        $fontSize++;
+
+        if( $fontSize >= $maxFont )
+            break;
+    }
+
+    //if the calculated font size is not within the threshold,
+    // wrap the text and try again
+    if( $fontSize < $minFont )
+    {
+        $wrapLength = intval( strlen( $caption ) / $rows );
+
+        //remove the newlines
+        $caption = str_replace( "\n", ' ', $caption );
+
+        //re-wrap caption
+        $caption = wordwrap( $caption, $wrapLength, "\n", true );
+
+        return getFontSize( $image, $draw, $caption, $rows + 1 );
+    }
+
+    return array(
+        $fontSize,
+        $caption
+    );
+}
+
+/**
+ * @param $filename
+ * @param $apiKey
+ *
+ * @return mixed
+ */
 function uploadImage( $filename, $apiKey )
 {
     //set POST variables
