@@ -188,14 +188,14 @@ function getFontSize( Imagick $image, ImagickDraw $draw, $caption, $rows = 1 )
     // Create an array for the textwidth and textheight
     $textProperties = array( 'textWidth' => 0 );
 
-    //make sure text is no wider than 94% of image size
+    //make sure text is no wider than 78% of image size
     $imgSize             = $image->getImageGeometry();
-    $textDesiredWidth    = intval( $imgSize[ 'width' ] * .88 );
+    $textDesiredWidth    = intval( $imgSize[ 'width' ] * .80 );
     $minTextDesiredWidth = intval( $imgSize[ 'width' ] * .60 );
 
     //set the max and min font sizes based on the height and string length
-    $maxFont = floor( $imgSize[ 'height' ] * .065 ) * ( min( 1, ( $imgSize[ 'height' ] * .33 ) / strlen( $caption ) ) );
-    $minFont = floor( $imgSize[ 'height' ] * .055 ) * ( min( 1, ( $imgSize[ 'height' ] * .33 ) / strlen( $caption ) ) );
+    $maxFont = floor( $imgSize[ 'height' ] * .070 ) * ( min( 1, ( $imgSize[ 'height' ] * .33 ) / strlen( $caption ) ) );
+    $minFont = floor( $imgSize[ 'height' ] * .060 ) * ( min( 1, ( $imgSize[ 'height' ] * .33 ) / strlen( $caption ) ) );
 
     // Set an initial value for the fontsize, will be increased in the loop below
     $fontSize = 0;
