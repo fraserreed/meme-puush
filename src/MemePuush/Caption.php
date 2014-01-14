@@ -37,11 +37,50 @@ class Caption
      */
     protected $drawLayer;
 
+    /**
+     * @var array
+     */
+    protected $boundingBox;
+
+    /**
+     * @var bool
+     */
+    protected $debug = false;
+
     public function __construct( Image $image, $text, $location = 'top' )
     {
         $this->target   = $image;
         $this->text     = $text;
         $this->location = $location;
+
+        //set border params based on location
+        if( $this->location == 'top' )
+        {
+            $this->boundingBox = array(
+                'x1'     => 2,
+                'x2'     => (int) ( $this->target->getWidth() - 2 ),
+                'x'      => (int) ( $this->target->getWidth() / 2 ),
+                'width'  => (int) $this->target->getWidth(),
+                'y1'     => 2,
+                'y2'     => (int) ( ( $this->target->getHeight() / 3 ) - 2 ),
+                'y'      => 10,
+                'height' => (int) ( $this->target->getHeight() / 3 )
+
+            );
+        }
+        else
+        {
+            $this->boundingBox = array(
+                'x1'     => 2,
+                'x2'     => (int) ( $this->target->getWidth() - 2 ),
+                'x'      => (int) ( $this->target->getWidth() / 2 ),
+                'width'  => (int) $this->target->getWidth(),
+                'y1'     => (int) ( 2 * ( $this->target->getHeight() / 3 ) - 2 ),
+                'y2'     => (int) ( $this->target->getHeight() - 2 ),
+                'y'      => (int) ( 2 * ( $this->target->getHeight() / 3 ) - 2 ),
+                'height' => (int) ( $this->target->getHeight() / 3 )
+            );
+        }
     }
 
     /**
@@ -101,28 +140,11 @@ class Caption
     }
 
     /**
-     * @return int
+     * @return array
      */
-    public function getX()
+    public function getBoundingBox()
     {
-        return (int) $this->target->getWidth() / 2;
-    }
-
-    public function getY()
-    {
-        //determine the vertical position based on the top / bottom location
-        switch( $this->getLocation() )
-        {
-            case 'top':
-                return $this->getFontSize() + 10;
-            case 'bottom':
-            default:
-                //if( $captionRows == 1 )
-                //    $yPos = $h - $textProperties[ 'boundingBox' ][ 'y2' ];
-                //else
-                return $this->target->getHeight() - 100; //$textProperties[ 'textHeight' ];
-            //break;
-        }
+        return $this->boundingBox;
     }
 
     /**
@@ -147,6 +169,9 @@ class Caption
         //set alignment to center
         $drawLayer->setTextAlignment( 2 );
 
+        //set text spacing
+        $drawLayer->setTextKerning( 0.75 );
+
         //set font colour to black initially to create a smooth stroke
         $drawLayer->setFillColor( new ImagickPixel( "#000000" ) );
 
@@ -169,8 +194,12 @@ class Caption
         //get the initial draw layer
         $drawLayer = $this->getDrawLayer();
 
+        $boundingBox = $this->getBoundingBox();
+        $x           = $boundingBox[ 'x' ];
+        $y           = $boundingBox[ 'y' ] + $this->getFontSize();
+
         //write the initial caption
-        $this->target->getImage()->annotateImage( $drawLayer, $this->getX(), $this->getY(), 0, $this->getText() );
+        $this->target->getImage()->annotateImage( $drawLayer, $x, $y, 0, $this->getText() );
 
         //now change the fill colour to black
         $drawLayer->setFillColor( new ImagickPixel( '#FFFFFF' ) );
@@ -178,30 +207,45 @@ class Caption
         $drawLayer->setStrokeAlpha( 0 );
 
         //re-write the text on the image
-        $this->target->getImage()->annotateImage( $drawLayer, $this->getX(), $this->getY(), 0, $this->getText() );
+        $this->target->getImage()->annotateImage( $drawLayer, $x, $y, 0, $this->getText() );
+
+        //if in debug mode, show bounding box rectangles
+        if( $this->debug == true )
+        {
+            $drawLayer->setFillAlpha( 0 );
+            $drawLayer->setStrokeColor( new ImagickPixel( 'white' ) );
+            $drawLayer->setStrokeWidth( 2 );
+            $drawLayer->rectangle( $boundingBox[ 'x1' ], $boundingBox[ 'y1' ], $boundingBox[ 'x2' ], $boundingBox[ 'y2' ] );
+
+            $this->target->getImage()->drawImage( $drawLayer );
+        }
     }
 
+    /**
+     * @param \ImagickDraw $drawLayer
+     * @param int          $rows
+     */
     private function calculateFontSize( ImagickDraw $drawLayer, $rows = 1 )
     {
-        $image = $this->target;
+        $boundingBox = $this->getBoundingBox();
 
         // Create an array for the textwidth and textheight
         $textProperties = array( 'textWidth' => 0 );
 
         //make sure text is no wider than 78% of image size
-
-        $textDesiredWidth    = intval( $image->getWidth() * .94 );
-        $minTextDesiredWidth = intval( $image->getWidth() * .75 );
+        $textDesiredWidth    = intval( $boundingBox[ 'width' ] * .94 );
+        $minTextDesiredWidth = intval( $boundingBox[ 'width' ] * .75 );
 
         //set the max and min font sizes based on the height and string length
-        $maxFont = floor( $image->getHeight() * .070 ) * ( min( 1, ( $image->getHeight() * .33 ) / $this->getStringLength() ) );
-        $minFont = floor( $image->getHeight() * .060 ) * ( min( 1, ( $image->getHeight() * .33 ) / $this->getStringLength() ) );
+        $maxFont = floor( $boundingBox[ 'height' ] * 3 * .070 ) * ( min( 1, ( $boundingBox[ 'height' ] * 3 * .33 ) / $this->getStringLength() ) );
+        $minFont = floor( $boundingBox[ 'height' ] * 3 * .060 ) * ( min( 1, ( $boundingBox[ 'height' ] * 3 * .33 ) / $this->getStringLength() ) );
+
+        $image = $this->target;
 
         // Increase the fontsize until we have reached our desired width
         while( $textProperties[ 'textWidth' ] <= $textDesiredWidth )
         {
             $drawLayer->setFontSize( $this->getFontSize() );
-            $drawLayer->setTextKerning( min( 4, $this->getFontSize() / 24 ) );
             $textProperties = $image->getImage()->queryFontMetrics( $drawLayer, $this->getText() );
             $this->setFontSize( $this->getFontSize() + 1 );
 
@@ -227,6 +271,14 @@ class Caption
             $this->setText( wordwrap( $caption, $wrapLength, "\n", true ) );
 
             $this->calculateFontSize( $drawLayer, $rows + 1 );
+        }
+
+        //if bounding box is too high, make font size smaller until it fits
+        while( $textProperties[ 'textHeight' ] >= $boundingBox[ 'height' ] )
+        {
+            $drawLayer->setFontSize( $this->getFontSize() );
+            $textProperties = $image->getImage()->queryFontMetrics( $drawLayer, $this->getText() );
+            $this->setFontSize( $this->getFontSize() - 1 );
         }
     }
 }
