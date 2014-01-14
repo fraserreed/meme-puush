@@ -49,14 +49,7 @@ class Image
 
     public function __construct( $url )
     {
-        try
-        {
-            $this->image = new Imagick( $url );
-        }
-        catch( \Exception $e )
-        {
-            return false;
-        }
+        $this->image = new Imagick( $url );
 
         return $this;
     }

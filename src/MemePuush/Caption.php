@@ -43,6 +43,10 @@ class Caption
     protected $boundingBox;
 
     /**
+     * @var int
+     */
+    protected $multiplier = 4;
+    /**
      * @var bool
      */
     protected $debug = false;
@@ -62,9 +66,9 @@ class Caption
                 'x'      => (int) ( $this->target->getWidth() / 2 ),
                 'width'  => (int) $this->target->getWidth(),
                 'y1'     => 2,
-                'y2'     => (int) ( ( $this->target->getHeight() / 3 ) - 2 ),
+                'y2'     => (int) ( ( $this->target->getHeight() / $this->multiplier ) - 2 ),
                 'y'      => 10,
-                'height' => (int) ( $this->target->getHeight() / 3 )
+                'height' => (int) ( $this->target->getHeight() / $this->multiplier )
 
             );
         }
@@ -75,10 +79,10 @@ class Caption
                 'x2'     => (int) ( $this->target->getWidth() - 2 ),
                 'x'      => (int) ( $this->target->getWidth() / 2 ),
                 'width'  => (int) $this->target->getWidth(),
-                'y1'     => (int) ( 2 * ( $this->target->getHeight() / 3 ) - 2 ),
+                'y1'     => (int) ( $this->target->getHeight() - ( $this->target->getHeight() / $this->multiplier ) - 2 ),
                 'y2'     => (int) ( $this->target->getHeight() - 2 ),
-                'y'      => (int) ( 2 * ( $this->target->getHeight() / 3 ) - 2 ),
-                'height' => (int) ( $this->target->getHeight() / 3 )
+                'y'      => (int) ( $this->target->getHeight() - ( $this->target->getHeight() / $this->multiplier ) - 2 ),
+                'height' => (int) ( $this->target->getHeight() / $this->multiplier )
             );
         }
     }
