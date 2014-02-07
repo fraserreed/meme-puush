@@ -5,12 +5,22 @@ namespace MemePuush;
 
 use Imagick;
 
+use MemePuush\Caption;
+use MemePuush\Output\AbstractOutput;
+use MemePuush\Output\File;
+use MemePuush\Output\Puush;
+
 class Image
 {
     /**
      * @var Imagick
      */
     protected $image;
+
+    /**
+     * @var AbstractOutput
+     */
+    protected $output;
 
     /**
      * @var array
@@ -131,83 +141,36 @@ class Image
      */
     public function output()
     {
-        if( !$this->topCaption->isEmpty() )
-            $this->topCaption->annotateImage();
-
-        if( !$this->bottomCaption->isEmpty() )
-            $this->bottomCaption->annotateImage();
-
-        $this->image->setImageFormat( "jpg" );
-        $this->image->setCompression( Imagick::COMPRESSION_JPEG );
-        $this->image->setCompressionQuality( 70 );
-
-        switch( $this->outputFormat )
+        switch( strtolower( $this->outputFormat ) )
         {
-            case 'file':
-                $this->uploadImage();
+            case 'puush':
+                $this->output = new Puush( $this->apiKey );
                 break;
             default:
-                $this->echoImage();
+                //generate file
+                $this->output = new File();
                 break;
         }
-    }
 
-    /**
-     * @return mixed
-     */
-    public function uploadImage()
-    {
-        //set filename
-        $filename = '/tmp/' . microtime( true ) . '.jpg';
+        $this->output->addHashInput( $this->image->getImageSignature() );
+        $this->output->addHashInput( $this->topCaption->getText() );
+        $this->output->addHashInput( $this->bottomCaption->getText() );
 
-        //finally output the image
-        $this->image->writeimage( $filename );
-
-        //set POST variables
-        $url    = 'https://puush.me/api/up';
-        $fields = array(
-            'k' => urlencode( $this->apiKey ),
-            'z' => urlencode( 'poop' ),
-            'f' => '@' . $filename
-        );
-
-        //open connection
-        $ch = curl_init();
-
-        //set the url, number of POST vars, POST data
-        curl_setopt( $ch, CURLOPT_URL, $url );
-        curl_setopt( $ch, CURLOPT_POST, count( $fields ) );
-        curl_setopt( $ch, CURLOPT_POSTFIELDS, $fields );
-        curl_setopt( $ch, CURLOPT_RETURNTRANSFER, true );
-
-        //execute post
-        $result = curl_exec( $ch );
-
-        //close connection
-        curl_close( $ch );
-
-        $response = explode( ',', $result );
-
-        //if the response was successful, return the url
-        if( $response[ 0 ] == 0 )
+        if( !$this->output->exists() )
         {
-            $url = $response[ 1 ];
-        }
-        else
-        {
-            //otherwise return error
-            $url = $response[ 0 ];
+            if( !$this->topCaption->isEmpty() )
+                $this->topCaption->annotateImage();
+
+            if( !$this->bottomCaption->isEmpty() )
+                $this->bottomCaption->annotateImage();
+
+            $this->image->setImageFormat( "jpg" );
+            $this->image->setCompression( Imagick::COMPRESSION_JPEG );
+            $this->image->setCompressionQuality( 70 );
+
+            $this->output->upload( $this->image );
         }
 
-        //remove the file
-        unlink( $filename );
-
-        echo json_encode( array( 'url' => $url ) );
-    }
-
-    public function echoImage()
-    {
-        header( 'Content-type: image/jpg' );
-        echo $this->image;
+        return $this->output->getOutputPath();
     }
 }

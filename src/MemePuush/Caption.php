@@ -28,6 +28,11 @@ class Caption
     protected $stringLength;
 
     /**
+     * @var string
+     */
+    protected $fontPath = '../fonts/impact.ttf';
+
+    /**
      * @var int
      */
     protected $fontSize;
@@ -128,6 +133,22 @@ class Caption
     }
 
     /**
+     * @param string $fontPath
+     */
+    public function setFontPath( $fontPath )
+    {
+        $this->fontPath = $fontPath;
+    }
+
+    /**
+     * @return string
+     */
+    public function getFontPath()
+    {
+        return $this->fontPath;
+    }
+
+    /**
      * @return int
      */
     public function getFontSize()
@@ -160,7 +181,7 @@ class Caption
         $drawLayer = new ImagickDraw();
 
         //set the font
-        $drawLayer->setFont( './font/impact.ttf' );
+        $drawLayer->setFont( $this->getFontPath() );
 
         //set stroke colour to black
         $drawLayer->setStrokeColor( new ImagickPixel( "#000000" ) );

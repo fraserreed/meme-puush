@@ -1,0 +1,6 @@
+# phpunit code coverage reports
+/report
+
+# composer installed packages
+/vendor
+
