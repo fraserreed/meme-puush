@@ -149,19 +149,19 @@ class Caption
     }
 
     /**
-     * @return int
-     */
-    public function getFontSize()
-    {
-        return (int) $this->fontSize;
-    }
-
-    /**
      * @param int $fontSize
      */
     private function setFontSize( $fontSize )
     {
         $this->fontSize = $fontSize;
+    }
+
+    /**
+     * @return int
+     */
+    public function getFontSize()
+    {
+        return (int) $this->fontSize;
     }
 
     /**
