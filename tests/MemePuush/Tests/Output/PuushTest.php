@@ -15,8 +15,7 @@ class PuushTest extends \PHPUnit_Framework_TestCase
     protected $object;
 
     /**
-     * Sets up the fixture, for example, opens a network connection.
-     * This method is called before a test is executed.
+     * @covers MemePuush\Output\Puush::__construct
      */
     protected function setUp()
     {

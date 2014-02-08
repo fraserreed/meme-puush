@@ -24,11 +24,29 @@ class FileTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
+     * @covers MemePuush\Output\AbstractOutput::getFilename
+     * @covers MemePuush\Output\AbstractOutput::getHash
+     * @covers MemePuush\Output\File::getDirectory
      * @covers MemePuush\Output\File::getOutputPath
      */
     public function testGetOutputPath()
     {
         $this->assertEquals( File::PATH . '00000001.jpg', $this->object->getOutputPath() );
+    }
+
+    /**
+     * @covers MemePuush\Output\AbstractOutput::addHashInput
+     * @covers MemePuush\Output\AbstractOutput::getFilename
+     * @covers MemePuush\Output\AbstractOutput::getHash
+     * @covers MemePuush\Output\File::getDirectory
+     * @covers MemePuush\Output\File::getOutputPath
+     */
+    public function testGetOutputPathWithHash()
+    {
+        $this->object->addHashInput( 'testing123' );
+        $this->object->addHashInput( 'testing456' );
+
+        $this->assertEquals( File::PATH . '50640732.jpg', $this->object->getOutputPath() );
     }
 
     /**

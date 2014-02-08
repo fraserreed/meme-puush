@@ -58,9 +58,9 @@ class Caption
 
     public function __construct( Image $image, $text, $location = 'top' )
     {
-        $this->target   = $image;
-        $this->text     = $text;
-        $this->location = $location;
+        $this->target = $image;
+        $this->setText( $text );
+        $this->setLocation( $location );
 
         //set border params based on location
         if( $this->location == 'top' )
@@ -106,6 +106,14 @@ class Caption
     public function getLocation()
     {
         return $this->location;
+    }
+
+    /**
+     * @param $location
+     */
+    private function setLocation( $location )
+    {
+        $this->location = $location;
     }
 
     /**

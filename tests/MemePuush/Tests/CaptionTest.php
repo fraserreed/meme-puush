@@ -16,8 +16,9 @@ class CaptionTest extends \PHPUnit_Framework_TestCase
     protected $image;
 
     /**
-     * Sets up the fixture, for example, opens a network connection.
-     * This method is called before a test is executed.
+     * @covers MemePuush\Caption::__construct
+     * @covers MemePuush\Caption::setLocation
+     * @covers MemePuush\Caption::setText
      */
     protected function setUp()
     {

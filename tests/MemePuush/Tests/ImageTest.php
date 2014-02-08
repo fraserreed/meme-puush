@@ -22,8 +22,7 @@ class ImageTest extends \PHPUnit_Framework_TestCase
     protected $image;
 
     /**
-     * Sets up the fixture, for example, opens a network connection.
-     * This method is called before a test is executed.
+     * @covers MemePuush\Image::__construct
      */
     protected function setUp()
     {
@@ -56,6 +55,7 @@ class ImageTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @covers MemePuush\Image::getHeight
+     * @covers MemePuush\Image::getImageProperties
      */
     public function testGetHeight()
     {
@@ -64,6 +64,7 @@ class ImageTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @covers MemePuush\Image::getWidth
+     * @covers MemePuush\Image::getImageProperties
      */
     public function testGetWidth()
     {
