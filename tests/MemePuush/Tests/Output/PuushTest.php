@@ -24,35 +24,21 @@ class PuushTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * Tears down the fixture, for example, closes a network connection.
-     * This method is called after a test is executed.
-     */
-    protected function tearDown()
-    {
-    }
-
-    /**
      * @covers MemePuush\Output\Puush::setApiKey
-     * @todo   Implement testSetApiKey().
      */
     public function testSetApiKey()
     {
-        // Remove the following lines when you implement this test.
-        $this->markTestIncomplete(
-            'This test has not been implemented yet.'
-        );
+        $this->object->setApiKey( 'new-test' );
+
+        $this->assertEquals( 'new-test', $this->object->getApiKey() );
     }
 
     /**
      * @covers MemePuush\Output\Puush::getApiKey
-     * @todo   Implement testGetApiKey().
      */
     public function testGetApiKey()
     {
-        // Remove the following lines when you implement this test.
-        $this->markTestIncomplete(
-            'This test has not been implemented yet.'
-        );
+        $this->assertEquals( 'test', $this->object->getApiKey() );
     }
 
     /**

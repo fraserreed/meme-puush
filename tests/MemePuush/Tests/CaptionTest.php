@@ -13,7 +13,7 @@ class CaptionTest extends \PHPUnit_Framework_TestCase
     /**
      * @var Image
      */
-    protected $mockImage;
+    protected $image;
 
     /**
      * Sets up the fixture, for example, opens a network connection.
@@ -21,7 +21,11 @@ class CaptionTest extends \PHPUnit_Framework_TestCase
      */
     protected function setUp()
     {
-        $this->mockImage = $this->getMockBuilder( 'MemePuush\Image' )->disableOriginalConstructor()->getMock();
+        $this->image = new Image();
+        $imagick     = $this->getMock( 'Imagick', array( 'getImageGeometry' ), array() );
+        $imagick->expects( $this->any() )->method( 'getImageGeometry' )->will( $this->returnValue( array( 'width' => 480, 'height' => 640 ) ) );
+
+        $this->image->setImage( $imagick );
     }
 
     /**
@@ -29,10 +33,10 @@ class CaptionTest extends \PHPUnit_Framework_TestCase
      */
     public function testIsEmpty()
     {
-        $object = new Caption( $this->mockImage, '' );
+        $object = new Caption( $this->image, '' );
         $this->assertTrue( $object->isEmpty() );
 
-        $object = new Caption( $this->mockImage, 'test' );
+        $object = new Caption( $this->image, 'test' );
         $this->assertFalse( $object->isEmpty() );
     }
 
@@ -41,10 +45,10 @@ class CaptionTest extends \PHPUnit_Framework_TestCase
      */
     public function testGetLocation()
     {
-        $object = new Caption( $this->mockImage, '', 'top' );
+        $object = new Caption( $this->image, '', 'top' );
         $this->assertEquals( 'top', $object->getLocation() );
 
-        $object = new Caption( $this->mockImage, 'test', 'bottom' );
+        $object = new Caption( $this->image, 'test', 'bottom' );
         $this->assertEquals( 'bottom', $object->getLocation() );
     }
 
@@ -53,13 +57,13 @@ class CaptionTest extends \PHPUnit_Framework_TestCase
      */
     public function testGetText()
     {
-        $object = new Caption( $this->mockImage, '' );
+        $object = new Caption( $this->image, '' );
         $this->assertEquals( '', $object->getText() );
 
-        $object = new Caption( $this->mockImage, 'test' );
+        $object = new Caption( $this->image, 'test' );
         $this->assertEquals( 'TEST', $object->getText() );
 
-        $object = new Caption( $this->mockImage, 'mix OF cases and 28271!' );
+        $object = new Caption( $this->image, 'mix OF cases and 28271!' );
         $this->assertEquals( 'MIX OF CASES AND 28271!', $object->getText() );
     }
 
@@ -68,13 +72,13 @@ class CaptionTest extends \PHPUnit_Framework_TestCase
      */
     public function testGetStringLength()
     {
-        $object = new Caption( $this->mockImage, '' );
+        $object = new Caption( $this->image, '' );
         $this->assertEquals( 0, $object->getStringLength() );
 
-        $object = new Caption( $this->mockImage, 'test' );
+        $object = new Caption( $this->image, 'test' );
         $this->assertEquals( 4, $object->getStringLength() );
 
-        $object = new Caption( $this->mockImage, 'mix OF cases and 28271!' );
+        $object = new Caption( $this->image, 'mix OF cases and 28271!' );
         $this->assertEquals( 23, $object->getStringLength() );
     }
 
@@ -84,7 +88,7 @@ class CaptionTest extends \PHPUnit_Framework_TestCase
      */
     public function testSetGetFontPath()
     {
-        $object = new Caption( $this->mockImage, '' );
+        $object = new Caption( $this->image, '' );
         $object->setFontPath( '/path/to/nowhere' );
         $this->assertEquals( '/path/to/nowhere', $object->getFontPath() );
     }
@@ -94,7 +98,7 @@ class CaptionTest extends \PHPUnit_Framework_TestCase
      */
     public function testGetFontSize()
     {
-        $object = new Caption( $this->mockImage, '' );
+        $object = new Caption( $this->image, '' );
         $this->assertEquals( 0, $object->getFontSize() );
     }
 
@@ -103,18 +107,18 @@ class CaptionTest extends \PHPUnit_Framework_TestCase
      */
     public function testGetBoundingBoxDefaultTop()
     {
-        $object = new Caption( $this->mockImage, 'test' );
+        $object = new Caption( $this->image, 'test' );
 
         //validate the default with no image dimensions
         $expected = array(
             'x1'     => 2,
-            'x2'     => -2,
-            'x'      => 0,
-            'width'  => 0,
+            'x2'     => 478,
+            'x'      => 240,
+            'width'  => 480,
             'y1'     => 2,
-            'y2'     => -2,
+            'y2'     => 158,
             'y'      => 10,
-            'height' => 0
+            'height' => 160
         );
 
         $this->assertEquals( $expected, $object->getBoundingBox() );
@@ -125,18 +129,18 @@ class CaptionTest extends \PHPUnit_Framework_TestCase
      */
     public function testGetBoundingBoxDefaultBottom()
     {
-        $object = new Caption( $this->mockImage, 'test', 'bottom' );
+        $object = new Caption( $this->image, 'test', 'bottom' );
 
         //validate the default with no image dimensions
         $expected = array(
             'x1'     => 2,
-            'x2'     => -2,
-            'x'      => 0,
-            'width'  => 0,
-            'y1'     => -2,
-            'y2'     => -2,
-            'y'      => -2,
-            'height' => 0
+            'x2'     => 478,
+            'x'      => 240,
+            'width'  => 480,
+            'y1'     => 478,
+            'y2'     => 638,
+            'y'      => 478,
+            'height' => 160
         );
 
         $this->assertEquals( $expected, $object->getBoundingBox() );

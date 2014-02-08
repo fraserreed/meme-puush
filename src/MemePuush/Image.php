@@ -57,11 +57,20 @@ class Image
      */
     protected $apiKey;
 
-    public function __construct( $url )
+    public function __construct( $url = '' )
     {
-        $this->image = new Imagick( $url );
+        if( $url )
+            $this->setImage( new Imagick( $url ) );
 
         return $this;
+    }
+
+    /**
+     * @param \Imagick $image
+     */
+    public function setImage( Imagick $image )
+    {
+        $this->image = $image;
     }
 
     /**
@@ -119,11 +128,27 @@ class Image
     }
 
     /**
+     * @return Caption
+     */
+    public function getTopCaption()
+    {
+        return $this->topCaption;
+    }
+
+    /**
      * @param string $bottomCaption
      */
     public function setBottomCaption( $bottomCaption )
     {
         $this->bottomCaption = new Caption( $this, $bottomCaption, 'bottom' );
+    }
+
+    /**
+     * @return Caption
+     */
+    public function getBottomCaption()
+    {
+        return $this->bottomCaption;
     }
 
     /**
@@ -134,6 +159,22 @@ class Image
     {
         $this->outputFormat = $format;
         $this->apiKey       = $apiKey;
+    }
+
+    /**
+     * @return string
+     */
+    public function getOutputFormat()
+    {
+        return $this->outputFormat;
+    }
+
+    /**
+     * @return string
+     */
+    public function getApiKey()
+    {
+        return $this->apiKey;
     }
 
     /**
@@ -151,6 +192,9 @@ class Image
                 $this->output = new File();
                 break;
         }
+
+        if( !$this->image )
+            throw new \Exception( 'Could not generate image output' );
 
         $this->output->addHashInput( $this->image->getImageSignature() );
         $this->output->addHashInput( $this->topCaption->getText() );
