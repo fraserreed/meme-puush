@@ -23,7 +23,7 @@ class CaptionTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $this->image = new Image();
-        $imagick     = $this->getMock( 'Imagick', array( 'getImageGeometry' ), array() );
+        $imagick     = $this->getMock( 'Imagick', array( 'getImageGeometry', 'queryFontMetrics' ), array() );
         $imagick->expects( $this->any() )->method( 'getImageGeometry' )->will( $this->returnValue( array( 'width' => 480, 'height' => 640 ) ) );
 
         $this->image->setImage( $imagick );
@@ -149,14 +149,36 @@ class CaptionTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @covers MemePuush\Caption::getDrawLayer
-     * @todo   Implement testGetDrawLayer().
+     * @covers MemePuush\Caption::setDraw
+     * @covers MemePuush\Caption::getDraw
+     * @covers MemePuush\Caption::setPixel
+     * @covers MemePuush\Caption::getPixel
+     * @covers MemePuush\Caption::setGravity
+     * @covers MemePuush\Caption::getGravity
      */
     public function testGetDrawLayer()
     {
-        // Remove the following lines when you implement this test.
-        $this->markTestIncomplete(
-            'This test has not been implemented yet.'
+        $object = new Caption( $this->image, 'twelve' );
+
+        $draw = $this->getMock(
+            'ImagickDraw',
+            array(
+                 'setFont', 'setFontSize',
+                 'setStrokeColor', 'setStrokeAntialias', 'setStrokeAlpha',
+                 'setTextAntialias', 'setTextAlignment', 'setTextKerning', 'setGravity', 'setFillColor'
+            ),
+            array()
         );
+        $object->setDraw( $draw );
+
+        $pixel = $this->getMock( 'ImagickPixel' );
+        $object->setPixel( $pixel );
+
+        $object->setGravity( 2 );
+
+        $drawLayer = $object->getDrawLayer();
+
+        $this->assertEquals( $draw, $drawLayer );
     }
 
     /**

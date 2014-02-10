@@ -3,7 +3,9 @@
 namespace MemePuush;
 
 
-use Imagick, ImagickDraw, ImagickPixel;
+use Imagick;
+use ImagickDraw;
+use ImagickPixel;
 
 class Caption
 {
@@ -11,6 +13,21 @@ class Caption
      * @var Imagick
      */
     protected $target;
+
+    /**
+     * @var ImagickDraw
+     */
+    protected $draw;
+
+    /**
+     * @var ImagickPixel
+     */
+    protected $pixel;
+
+    /**
+     * @var int
+     */
+    protected $gravity;
 
     /**
      * @var string
@@ -181,23 +198,82 @@ class Caption
     }
 
     /**
+     * @param \ImagickDraw $draw
+     */
+    public function setDraw( ImagickDraw $draw )
+    {
+        $this->draw = $draw;
+    }
+
+    /**
+     * @return \ImagickDraw
+     */
+    private function getDraw()
+    {
+        if( !$this->draw )
+            $this->draw = new ImagickDraw();
+
+        return $this->draw;
+    }
+
+    /**
+     * @param \ImagickPixel $pixel
+     */
+    public function setPixel( ImagickPixel $pixel )
+    {
+        $this->pixel = $pixel;
+    }
+
+    /**
+     * @param $color
+     *
+     * @return \ImagickPixel
+     */
+    private function getPixel( $color )
+    {
+        if( !$this->pixel )
+            $this->pixel = new ImagickPixel( $color );
+
+        return $this->pixel;
+    }
+
+    /**
+     * @param int $gravity
+     */
+    public function setGravity( $gravity )
+    {
+        $this->gravity = $gravity;
+    }
+
+    /**
+     * @return int
+     */
+    private function getGravity()
+    {
+        if( !$this->gravity )
+            $this->gravity = Imagick::GRAVITY_NORTH;
+
+        return $this->gravity;
+    }
+
+    /**
      * @return ImagickDraw
      */
     public function getDrawLayer()
     {
         //initialize the draw layer
-        $drawLayer = new ImagickDraw();
+        $drawLayer = $this->getDraw();
 
         //set the font
         $drawLayer->setFont( $this->getFontPath() );
 
         //set stroke colour to black
-        $drawLayer->setStrokeColor( new ImagickPixel( "#000000" ) );
+        $drawLayer->setStrokeColor( $this->getPixel( "#000000" ) );
         $drawLayer->setStrokeAntialias( true );
         $drawLayer->setTextAntialias( true );
 
         //north gravity is top center
-        $drawLayer->setGravity( Imagick::GRAVITY_NORTH );
+        $drawLayer->setGravity( $this->getGravity() );
 
         //set alignment to center
         $drawLayer->setTextAlignment( 2 );
@@ -206,7 +282,7 @@ class Caption
         $drawLayer->setTextKerning( 0.75 );
 
         //set font colour to black initially to create a smooth stroke
-        $drawLayer->setFillColor( new ImagickPixel( "#000000" ) );
+        $drawLayer->setFillColor( $this->getPixel( "#000000" ) );
 
         //and make the stroke transparent
         $drawLayer->setStrokeAlpha( 100 );
