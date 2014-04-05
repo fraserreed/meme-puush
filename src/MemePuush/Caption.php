@@ -109,6 +109,11 @@ class Caption
         }
     }
 
+    public function setDebug( $debug )
+    {
+        $this->debug = $debug;
+    }
+
     /**
      * @return bool
      */
@@ -349,22 +354,28 @@ class Caption
         $maxFont = floor( $boundingBox[ 'height' ] * 3 * .070 ) * ( min( 1, ( $boundingBox[ 'height' ] * 3 * .33 ) / $this->getStringLength() ) );
         $minFont = floor( $boundingBox[ 'height' ] * 3 * .060 ) * ( min( 1, ( $boundingBox[ 'height' ] * 3 * .33 ) / $this->getStringLength() ) );
 
-        $image = $this->target;
-
         // Increase the fontsize until we have reached our desired width
         while( $textProperties[ 'textWidth' ] <= $textDesiredWidth )
         {
             $drawLayer->setFontSize( $this->getFontSize() );
-            $textProperties = $image->getImage()->queryFontMetrics( $drawLayer, $this->getText() );
-            $this->setFontSize( $this->getFontSize() + 1 );
 
             //set a threshold so the font doesn't get too big for short strings
             if( $this->getFontSize() >= ( $maxFont * 2 ) )
                 break;
 
+            $textProperties = $this->getTextProperties( $drawLayer );
+
+            $addFont = ( $textProperties[ 'textWidth' ] > 0 ) ? ceil( $minTextDesiredWidth / $textProperties[ 'textWidth' ] ) : 1;
+
+            $this->setFontSize( $this->getFontSize() + $addFont );
+
             //try to fill the horizontal space
             if( $this->getFontSize() >= $maxFont && $textProperties[ 'textWidth' ] >= $minTextDesiredWidth )
+            {
+                //if it overfills, set it one font size smaller
+                $this->setFontSize( $this->getFontSize() - 1 );
                 break;
+            }
         }
 
         //if the calculated font size is not within the threshold,
@@ -382,12 +393,30 @@ class Caption
             $this->calculateFontSize( $drawLayer, $rows + 1 );
         }
 
-        //if bounding box is too high, make font size smaller until it fits
-        while( $textProperties[ 'textHeight' ] >= $boundingBox[ 'height' ] )
+        if( $textProperties[ 'textWidth' ] >= $textDesiredWidth )
         {
-            $drawLayer->setFontSize( $this->getFontSize() );
-            $textProperties = $image->getImage()->queryFontMetrics( $drawLayer, $this->getText() );
+            //if it overfills, set it one font size smaller
             $this->setFontSize( $this->getFontSize() - 1 );
         }
+
+        //if bounding box is too high, make font size smaller until it fits
+        while( $textProperties[ 'textHeight' ] >= $boundingBox[ 'height' ] + ( $this->getFontSize() - 10 ) )
+        {
+            $this->setFontSize( $this->getFontSize() - 1 );
+            $drawLayer->setFontSize( $this->getFontSize() );
+            $textProperties = $this->getTextProperties( $drawLayer );
+        }
+    }
+
+    /**
+     * @param \ImagickDraw $drawLayer
+     *
+     * @return array
+     */
+    private function getTextProperties( ImagickDraw $drawLayer )
+    {
+        $image = $this->target->getImage();
+
+        return $image->queryFontMetrics( $drawLayer, $this->getText() );
     }
 }
