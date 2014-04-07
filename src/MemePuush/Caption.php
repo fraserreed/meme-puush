@@ -47,7 +47,7 @@ class Caption
     /**
      * @var string
      */
-    protected $fontPath = 'fonts/impact.ttf';
+    protected $fontPath;
 
     /**
      * @var int
@@ -167,6 +167,9 @@ class Caption
      */
     public function setFontPath( $fontPath )
     {
+        if( !$this->fontPath )
+            $this->fontPath = dirname( dirname( __DIR__ . '/fonts/impact.ttf' ) );
+
         $this->fontPath = $fontPath;
     }
 
