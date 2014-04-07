@@ -1,9 +1,9 @@
 <?php
 
-function __autoload( $pClassName )
-{
-    require_once( '../src/' . str_replace( "\\", "/", $pClassName . '.php' ) );
-}
+chdir( dirname( __DIR__ ) );
+
+// Setup autoloading
+require 'init_autoloader.php';
 
 use MemePuush\Image;
 
@@ -40,8 +40,8 @@ if( !empty( $_GET ) )
         $image = new Image( $img );
 
         //if the image doesn't exist, cannot continue
-        if( !$image )
-            throw new \Exception( 'Could not load image: ' . $img );
+        //if( !$image )
+        //    throw new \Exception( 'Could not load image: ' . $img );
 
         $image->setOutputFormat( $output, $apiKey );
         $image->setTopCaption( $t1 );
@@ -89,9 +89,9 @@ else
         <tr>
             <td><label for="output">Output Type:</label></td>
             <td>
-                <input id="output" type="radio" name="output" value="puush" <?php echo ( empty( $output ) || $output == 'puush' ) ? 'checked' : ''?>/> Puu.sh<br/>
-                <input type="radio" name="output" value="file" <?php echo ( $output == 'file' ) ? 'checked' : ''?>/> File<br/>
-                <input type="radio" name="output" value="screen" <?php echo ( $output == 'screen' ) ? 'checked' : ''?>/> Screen
+                <input id="output" type="radio" name="output" value="<?php echo Image::PUUSH; ?>" <?php echo ( empty( $output ) || $output == Image::PUUSH ) ? 'checked' : ''?>/> Puu.sh<br/>
+                <input type="radio" name="output" value="<?php echo Image::FILE; ?>" <?php echo ( $output == Image::FILE ) ? 'checked' : ''?>/> File<br/>
+                <input type="radio" name="output" value="<?php echo Image::SCREEN; ?>" <?php echo ( $output == Image::SCREEN ) ? 'checked' : ''?>/> Screen
             </td>
         </tr>
         <tr class="text">

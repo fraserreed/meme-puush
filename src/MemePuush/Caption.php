@@ -47,7 +47,7 @@ class Caption
     /**
      * @var string
      */
-    protected $fontPath = '../fonts/impact.ttf';
+    protected $fontPath = 'fonts/impact.ttf';
 
     /**
      * @var int

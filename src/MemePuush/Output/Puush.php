@@ -3,6 +3,7 @@
 namespace MemePuush\Output;
 
 
+use Guzzle\Http\Client;
 use Imagick;
 use MemePuush\Output\File;
 
@@ -18,9 +19,22 @@ class Puush extends File
      */
     protected $outputPath;
 
+    /**
+     * @var \Guzzle\Http\Client
+     */
+    protected $client;
+
+    /**
+     * @var string
+     */
+    protected $url;
+
     public function __construct( $apiKey )
     {
         $this->setApiKey( $apiKey );
+
+        //set the puu.sh api url
+        $this->url = 'https://puush.me/api/up';
     }
 
     /**
@@ -48,8 +62,25 @@ class Puush extends File
     }
 
     /**
+     * @param \Guzzle\Http\Client $client
+     */
+    public function setHttpClient( Client $client )
+    {
+        $this->client = $client;
+    }
+
+    public function getHttpClient()
+    {
+        if( !$this->client )
+            $this->client = new Client( $this->url );
+
+        return $this->client;
+    }
+
+    /**
      * @param Imagick $image
      *
+     * @throws \Exception
      * @return string
      */
     public function upload( Imagick $image )
@@ -63,40 +94,35 @@ class Puush extends File
             $image->writeImage( parent::getOutputPath() );
         }
 
-        //set POST variables
-        $url    = 'https://puush.me/api/up';
         $fields = array(
             'k' => urlencode( $this->getApiKey() ),
             'z' => urlencode( 'poop' ),
             'f' => '@' . parent::getOutputPath()
         );
 
-        //open connection
-        $ch = curl_init();
+        //set POST variables
+        $request = $this->getHttpClient()->post( null, array(), $fields, array( 'exceptions' => false ) );
 
-        //set the url, number of POST vars, POST data
-        curl_setopt( $ch, CURLOPT_URL, $url );
-        curl_setopt( $ch, CURLOPT_POST, count( $fields ) );
-        curl_setopt( $ch, CURLOPT_POSTFIELDS, $fields );
-        curl_setopt( $ch, CURLOPT_RETURNTRANSFER, true );
+        $response = $request->send();
 
-        //execute post
-        $result = curl_exec( $ch );
-
-        //close connection
-        curl_close( $ch );
-
-        $response = explode( ',', $result );
-
-        //if the response was successful, return the url
-        if( $response[ 0 ] == 0 )
+        switch( $response->getStatusCode() )
         {
-            $this->outputPath = $response[ 1 ];
-        }
-        else
-        {
-            //otherwise return error
-            $this->outputPath = $response[ 0 ];
+            case 200:
+
+                //split the response
+                $output = explode( ',', $response->getBody( true ) );
+
+                //Response (upload, success): 0,{url},{id},{size}
+                //Response (failure): -1
+
+                //if the response was successful, return the url
+                $this->outputPath = ( $output[ 0 ] == 0 ) ? $output[ 1 ] : '';
+
+                break;
+
+            default:
+                throw new \Exception( 'Could not upload meme to puu.sh.  Response code returned: ' . $response->getStatusCode() );
+                break;
         }
     }
 }

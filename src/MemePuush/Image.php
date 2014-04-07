@@ -12,6 +12,15 @@ use MemePuush\Output\Puush;
 
 class Image
 {
+    const FILE   = 'file';
+    const PUUSH  = 'puush';
+    const SCREEN = 'screen';
+
+    /**
+     * @var string
+     */
+    protected $imageUrl;
+
     /**
      * @var Imagick
      */
@@ -59,8 +68,7 @@ class Image
 
     public function __construct( $url = '' )
     {
-        if( $url )
-            $this->setImage( new Imagick( $url ) );
+        $this->imageUrl = $url;
 
         return $this;
     }
@@ -74,17 +82,30 @@ class Image
     }
 
     /**
+     * @throws \Exception
      * @return \Imagick
      */
     public function getImage()
     {
+        if( !$this->image )
+        {
+            try
+            {
+                $this->image = new Imagick( $this->imageUrl );
+            }
+            catch( \Exception $e )
+            {
+                throw new \Exception( 'The url passed is not a valid image url: ' . $this->imageUrl );
+            }
+        }
+
         return $this->image;
     }
 
     private function getImageProperties()
     {
         if( !$this->imageProperties )
-            $this->imageProperties = $this->image->getImageGeometry();
+            $this->imageProperties = $this->getImage()->getImageGeometry();
 
         return $this->imageProperties;
     }
@@ -185,7 +206,7 @@ class Image
         switch( strtolower( $this->outputFormat ) )
         {
             case 'puush':
-                $this->output = new Puush( $this->apiKey );
+                $this->output = new Puush( $this->getApiKey() );
                 break;
             default:
                 //generate file
@@ -193,12 +214,12 @@ class Image
                 break;
         }
 
-        if( !$this->image )
-            throw new \Exception( 'Could not generate image output' );
+        //get imagick image
+        $image = $this->getImage();
 
-        $this->output->addHashInput( $this->image->getImageSignature() );
-        $this->output->addHashInput( $this->topCaption->getText() );
-        $this->output->addHashInput( $this->bottomCaption->getText() );
+        $this->output->addHashInput( $image->getImageSignature() );
+        $this->output->addHashInput( $this->getTopCaption()->getText() );
+        $this->output->addHashInput( $this->getBottomCaption()->getText() );
 
         if( !$this->output->exists() )
         {
@@ -208,11 +229,11 @@ class Image
             if( !$this->bottomCaption->isEmpty() )
                 $this->bottomCaption->annotateImage();
 
-            $this->image->setImageFormat( "jpg" );
-            $this->image->setCompression( Imagick::COMPRESSION_JPEG );
-            $this->image->setCompressionQuality( 70 );
+            $image->setImageFormat( "jpg" );
+            $image->setCompression( Imagick::COMPRESSION_JPEG );
+            $image->setCompressionQuality( 70 );
 
-            $this->output->upload( $this->image );
+            $this->output->upload( $image );
         }
 
         return $this->output->getOutputPath();
