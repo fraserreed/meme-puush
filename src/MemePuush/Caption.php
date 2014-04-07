@@ -167,9 +167,6 @@ class Caption
      */
     public function setFontPath( $fontPath )
     {
-        if( !$this->fontPath )
-            $this->fontPath = dirname( dirname( __DIR__ . '/fonts/impact.ttf' ) );
-
         $this->fontPath = $fontPath;
     }
 
@@ -178,6 +175,9 @@ class Caption
      */
     public function getFontPath()
     {
+        if( !$this->fontPath )
+            $this->fontPath = dirname( dirname( __DIR__ . '/fonts/impact.ttf' ) );
+
         return $this->fontPath;
     }
 
