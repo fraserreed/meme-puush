@@ -48,7 +48,7 @@ abstract class AbstractOutput implements IOutput
     /**
      * @return string
      */
-    protected function getFilename()
+    public function getFilename()
     {
         //set filename if it hasn't already been set
         if( empty( $this->filename ) )

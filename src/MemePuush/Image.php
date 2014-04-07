@@ -238,4 +238,17 @@ class Image
 
         return $this->output->getOutputPath();
     }
+
+    /**
+     * Get the raw filename of the result only
+     *
+     * @return string
+     */
+    public function getOutputFilename()
+    {
+        if( !$this->output )
+            $this->output();
+
+        return $this->output->getFilename();
+    }
 }
