@@ -287,18 +287,21 @@ class Caption
         $drawLayer->setTextAlignment( 2 );
 
         //set text spacing
-        $drawLayer->setTextKerning( 0.75 );
+        $drawLayer->setTextKerning( 0.65 );
 
         //set font colour to black initially to create a smooth stroke
         $drawLayer->setFillColor( $this->getPixel( "#000000" ) );
 
         //and make the stroke transparent
-        $drawLayer->setStrokeAlpha( 100 );
+        $drawLayer->setStrokeAlpha( 90 );
 
         $this->calculateFontSize( $drawLayer );
 
         //set the font size that was calculated
         $drawLayer->setFontSize( $this->getFontSize() );
+
+        //set bold font weight
+        $drawLayer->setFontWeight( 900 );
 
         return $drawLayer;
     }

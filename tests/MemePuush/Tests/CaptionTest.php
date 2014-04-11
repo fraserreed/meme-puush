@@ -166,7 +166,7 @@ class CaptionTest extends \PHPUnit_Framework_TestCase
         $draw = $this->getMock(
             'ImagickDraw',
             array(
-                 'setFont', 'setFontSize',
+                 'setFont', 'setFontSize', 'setFontWeight',
                  'setStrokeColor', 'setStrokeAntialias', 'setStrokeAlpha',
                  'setTextAntialias', 'setTextAlignment', 'setTextKerning', 'setGravity', 'setFillColor'
             ),
@@ -237,7 +237,7 @@ class CaptionTest extends \PHPUnit_Framework_TestCase
         $draw = $this->getMock(
             'ImagickDraw',
             array(
-                 'setFont', 'setFontSize',
+                 'setFont', 'setFontSize', 'setFontWeight',
                  'setStrokeColor', 'setStrokeAntialias', 'setStrokeAlpha',
                  'setTextAntialias', 'setTextAlignment', 'setTextKerning', 'setGravity', 'setFillColor'
             ),
@@ -319,7 +319,7 @@ class CaptionTest extends \PHPUnit_Framework_TestCase
         $draw = $this->getMock(
             'ImagickDraw',
             array(
-                 'setFont', 'setFontSize',
+                 'setFont', 'setFontSize', 'setFontWeight',
                  'setStrokeColor', 'setStrokeAntialias', 'setStrokeAlpha',
                  'setTextAntialias', 'setTextAlignment', 'setTextKerning', 'setGravity', 'setFillColor'
             ),
@@ -390,7 +390,7 @@ class CaptionTest extends \PHPUnit_Framework_TestCase
         $draw = $this->getMock(
             'ImagickDraw',
             array(
-                 'setFont', 'setFontSize',
+                 'setFont', 'setFontSize', 'setFontWeight',
                  'setStrokeColor', 'setStrokeAntialias', 'setStrokeAlpha',
                  'setTextAntialias', 'setTextAlignment', 'setTextKerning', 'setGravity', 'setFillColor'
             ),
@@ -456,7 +456,7 @@ class CaptionTest extends \PHPUnit_Framework_TestCase
         $draw = $this->getMock(
             'ImagickDraw',
             array(
-                 'setFont', 'setFontSize',
+                 'setFont', 'setFontSize', 'setFontWeight',
                  'setStrokeColor', 'setStrokeAntialias', 'setStrokeAlpha',
                  'setTextAntialias', 'setTextAlignment', 'setTextKerning', 'setGravity', 'setFillColor'
             ),
@@ -515,7 +515,7 @@ class CaptionTest extends \PHPUnit_Framework_TestCase
         $draw = $this->getMock(
             'ImagickDraw',
             array(
-                 'setFont', 'setFontSize',
+                 'setFont', 'setFontSize', 'setFontWeight',
                  'setStrokeColor', 'setStrokeAntialias', 'setStrokeAlpha',
                  'setTextAntialias', 'setTextAlignment', 'setTextKerning', 'setGravity', 'setFillColor'
             ),
@@ -575,7 +575,7 @@ class CaptionTest extends \PHPUnit_Framework_TestCase
         $draw = $this->getMock(
             'ImagickDraw',
             array(
-                 'setFont', 'setFontSize',
+                 'setFont', 'setFontSize', 'setFontWeight',
                  'setStrokeColor', 'setStrokeWidth', 'setStrokeAntialias', 'setStrokeAlpha', 'setFillAlpha',
                  'setTextAntialias', 'setTextAlignment', 'setTextKerning', 'setGravity', 'setFillColor',
                  'rectangle'
