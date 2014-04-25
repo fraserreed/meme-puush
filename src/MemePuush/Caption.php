@@ -176,7 +176,7 @@ class Caption
     public function getFontPath()
     {
         if( !$this->fontPath )
-            $this->fontPath = dirname( dirname( __DIR__ . '/fonts/impact.ttf' ) );
+            $this->fontPath = dirname( dirname( __DIR__ ) ) . '/fonts/impact.ttf';
 
         return $this->fontPath;
     }
@@ -287,13 +287,14 @@ class Caption
         $drawLayer->setTextAlignment( 2 );
 
         //set text spacing
-        $drawLayer->setTextKerning( 0.65 );
+        $drawLayer->setTextKerning( 0.55 );
 
         //set font colour to black initially to create a smooth stroke
         $drawLayer->setFillColor( $this->getPixel( "#000000" ) );
 
         //and make the stroke transparent
         $drawLayer->setStrokeAlpha( 90 );
+        $drawLayer->setStrokeWidth( 8 );
 
         $this->calculateFontSize( $drawLayer );
 
@@ -353,11 +354,11 @@ class Caption
         $textProperties = array( 'textWidth' => 0 );
 
         //make sure text is no wider than 78% of image size
-        $textDesiredWidth    = intval( $boundingBox[ 'width' ] * .94 );
+        $textDesiredWidth    = intval( $boundingBox[ 'width' ] * .98 );
         $minTextDesiredWidth = intval( $boundingBox[ 'width' ] * .75 );
 
         //set the max and min font sizes based on the height and string length
-        $maxFont = floor( $boundingBox[ 'height' ] * 3 * .070 ) * ( min( 1, ( $boundingBox[ 'height' ] * 3 * .33 ) / $this->getStringLength() ) );
+        $maxFont = floor( $boundingBox[ 'height' ] * 3 * .090 ) * ( min( 1, ( $boundingBox[ 'height' ] * 3 * .33 ) / $this->getStringLength() ) );
         $minFont = floor( $boundingBox[ 'height' ] * 3 * .060 ) * ( min( 1, ( $boundingBox[ 'height' ] * 3 * .33 ) / $this->getStringLength() ) );
 
         // Increase the fontsize until we have reached our desired width

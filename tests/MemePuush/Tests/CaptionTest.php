@@ -167,7 +167,7 @@ class CaptionTest extends \PHPUnit_Framework_TestCase
             'ImagickDraw',
             array(
                  'setFont', 'setFontSize', 'setFontWeight',
-                 'setStrokeColor', 'setStrokeAntialias', 'setStrokeAlpha',
+                 'setStrokeColor', 'setStrokeAntialias', 'setStrokeAlpha', 'setStrokeWidth',
                  'setTextAntialias', 'setTextAlignment', 'setTextKerning', 'setGravity', 'setFillColor'
             ),
             array()
@@ -182,7 +182,7 @@ class CaptionTest extends \PHPUnit_Framework_TestCase
         $drawLayer = $object->getDrawLayer();
 
         $this->assertEquals( $draw, $drawLayer );
-        $this->assertEquals( 66, $object->getFontSize() );
+        $this->assertEquals( 86, $object->getFontSize() );
     }
 
     /**
@@ -238,7 +238,7 @@ class CaptionTest extends \PHPUnit_Framework_TestCase
             'ImagickDraw',
             array(
                  'setFont', 'setFontSize', 'setFontWeight',
-                 'setStrokeColor', 'setStrokeAntialias', 'setStrokeAlpha',
+                 'setStrokeColor', 'setStrokeAntialias', 'setStrokeAlpha', 'setStrokeWidth',
                  'setTextAntialias', 'setTextAlignment', 'setTextKerning', 'setGravity', 'setFillColor'
             ),
             array()
@@ -253,7 +253,7 @@ class CaptionTest extends \PHPUnit_Framework_TestCase
         $drawLayer = $object->getDrawLayer();
 
         $this->assertEquals( $draw, $drawLayer );
-        $this->assertEquals( 71, $object->getFontSize() );
+        $this->assertEquals( 90, $object->getFontSize() );
     }
 
     /**
@@ -273,38 +273,28 @@ class CaptionTest extends \PHPUnit_Framework_TestCase
         $imagick->expects( $this->any() )->method( 'getImageGeometry' )->will( $this->returnValue( array( 'width' => 632, 'height' => 679 ) ) );
 
         $properties = array(
-            '{"characterWidth":1,"characterHeight":1,"ascender":2,"descender":-1,"textWidth":184,"textHeight":1,"maxHorizontalAdvance":1,"boundingBox":{"x1":0,"y1":-0.015625,"x2":0.8125,"y2":0.8125},"originX":183.75,"originY":0}',
-            '{"characterWidth":3,"characterHeight":3,"ascender":4,"descender":-1,"textWidth":334.015625,"textHeight":4,"maxHorizontalAdvance":4,"boundingBox":{"x1":-0.015625,"y1":-0.046875,"x2":2.4375,"y2":2.421875},"originX":333.75,"originY":0}',
-            '{"characterWidth":5,"characterHeight":5,"ascender":6,"descender":-2,"textWidth":453.03125,"textHeight":6,"maxHorizontalAdvance":6,"boundingBox":{"x1":-0.03125,"y1":-0.078125,"x2":4.078125,"y2":4.03125},"originX":452.75,"originY":0}',
-            '{"characterWidth":7,"characterHeight":7,"ascender":8,"descender":-2,"textWidth":574.046875,"textHeight":9,"maxHorizontalAdvance":9,"boundingBox":{"x1":-0.046875,"y1":-0.109375,"x2":5.703125,"y2":5.65625},"originX":573.75,"originY":0}',
-            '{"characterWidth":8,"characterHeight":8,"ascender":9,"descender":-2,"textWidth":595.046875,"textHeight":10,"maxHorizontalAdvance":10,"boundingBox":{"x1":-0.046875,"y1":-0.140625,"x2":6.515625,"y2":6.453125},"originX":593.75,"originY":0}',
-            '{"characterWidth":9,"characterHeight":9,"ascender":10,"descender":-2,"textWidth":714,"textHeight":11,"maxHorizontalAdvance":12,"boundingBox":{"x1":0,"y1":0,"x2":6,"y2":7},"originX":714.75,"originY":0}',
-            '{"characterWidth":10,"characterHeight":10,"ascender":11,"descender":-3,"textWidth":369,"textHeight":42,"maxHorizontalAdvance":13,"boundingBox":{"x1":0,"y1":0,"x2":6,"y2":8},"originX":368.25,"originY":0}',
-            '{"characterWidth":12,"characterHeight":12,"ascender":13,"descender":-3,"textWidth":432.5,"textHeight":48,"maxHorizontalAdvance":15,"boundingBox":{"x1":-0.5,"y1":0,"x2":8,"y2":9},"originX":432.25,"originY":0}',
-            '{"characterWidth":14,"characterHeight":14,"ascender":15,"descender":-3,"textWidth":487,"textHeight":54,"maxHorizontalAdvance":18,"boundingBox":{"x1":0,"y1":0,"x2":9,"y2":11},"originX":486.25,"originY":0}',
-            '{"characterWidth":15,"characterHeight":15,"ascender":16,"descender":-4,"textWidth":515.5,"textHeight":60,"maxHorizontalAdvance":19,"boundingBox":{"x1":-0.5,"y1":0,"x2":10,"y2":12},"originX":514.25,"originY":0}',
-            '{"characterWidth":16,"characterHeight":16,"ascender":17,"descender":-4,"textWidth":550,"textHeight":63,"maxHorizontalAdvance":21,"boundingBox":{"x1":-1,"y1":0,"x2":10,"y2":13},"originX":548.25,"originY":0}',
-            '{"characterWidth":17,"characterHeight":17,"ascender":18,"descender":-4,"textWidth":581,"textHeight":66,"maxHorizontalAdvance":22,"boundingBox":{"x1":0,"y1":0,"x2":11,"y2":13},"originX":580.25,"originY":0}',
-            '{"characterWidth":18,"characterHeight":18,"ascender":19,"descender":-4,"textWidth":605,"textHeight":69,"maxHorizontalAdvance":23,"boundingBox":{"x1":0,"y1":0,"x2":12,"y2":14},"originX":604.25,"originY":0}',
-            '{"characterWidth":19,"characterHeight":19,"ascender":20,"descender":-5,"textWidth":423.5,"textHeight":100,"maxHorizontalAdvance":24,"boundingBox":{"x1":-0.5,"y1":0,"x2":14,"y2":15},"originX":423.75,"originY":0}',
-            '{"characterWidth":21,"characterHeight":21,"ascender":22,"descender":-5,"textWidth":470,"textHeight":108,"maxHorizontalAdvance":27,"boundingBox":{"x1":0,"y1":0,"x2":13,"y2":17},"originX":470.25,"originY":0}',
-            '{"characterWidth":23,"characterHeight":23,"ascender":24,"descender":-5,"textWidth":518.5,"textHeight":116,"maxHorizontalAdvance":30,"boundingBox":{"x1":-0.5,"y1":0,"x2":14,"y2":18},"originX":518.25,"originY":0}',
-            '{"characterWidth":24,"characterHeight":24,"ascender":25,"descender":-6,"textWidth":526,"textHeight":124,"maxHorizontalAdvance":31,"boundingBox":{"x1":0,"y1":0,"x2":15,"y2":19},"originX":526.25,"originY":0}',
-            '{"characterWidth":25,"characterHeight":25,"ascender":26,"descender":-6,"textWidth":548,"textHeight":128,"maxHorizontalAdvance":32,"boundingBox":{"x1":0,"y1":0,"x2":16,"y2":20},"originX":548.25,"originY":0}',
-            '{"characterWidth":26,"characterHeight":26,"ascender":27,"descender":-6,"textWidth":568.5,"textHeight":132,"maxHorizontalAdvance":33,"boundingBox":{"x1":-0.5,"y1":0,"x2":17,"y2":21},"originX":568.25,"originY":0}',
-            '{"characterWidth":27,"characterHeight":27,"ascender":28,"descender":-6,"textWidth":598.5,"textHeight":136,"maxHorizontalAdvance":35,"boundingBox":{"x1":-0.5,"y1":0,"x2":17,"y2":21},"originX":598.25,"originY":0}',
-            '{"characterWidth":28,"characterHeight":28,"ascender":29,"descender":-6,"textWidth":485,"textHeight":175,"maxHorizontalAdvance":36,"boundingBox":{"x1":-1,"y1":0,"x2":18,"y2":22},"originX":484.25,"originY":0}',
-            '{"characterWidth":29,"characterHeight":29,"ascender":30,"descender":-7,"textWidth":497,"textHeight":185,"maxHorizontalAdvance":37,"boundingBox":{"x1":-1,"y1":0,"x2":19,"y2":23},"originX":496.25,"originY":0}',
-            '{"characterWidth":30,"characterHeight":30,"ascender":31,"descender":-7,"textWidth":511.5,"textHeight":190,"maxHorizontalAdvance":39,"boundingBox":{"x1":-0.5,"y1":0,"x2":20,"y2":24},"originX":511.25,"originY":0}',
-            '{"characterWidth":31,"characterHeight":31,"ascender":32,"descender":-7,"textWidth":529.5,"textHeight":195,"maxHorizontalAdvance":40,"boundingBox":{"x1":-0.5,"y1":0,"x2":20,"y2":25},"originX":529.25,"originY":0}',
-            '{"characterWidth":32,"characterHeight":32,"ascender":33,"descender":-7,"textWidth":548,"textHeight":200,"maxHorizontalAdvance":41,"boundingBox":{"x1":-1,"y1":0,"x2":21,"y2":25},"originX":547.25,"originY":0}',
-            '{"characterWidth":33,"characterHeight":33,"ascender":34,"descender":-7,"textWidth":565,"textHeight":205,"maxHorizontalAdvance":42,"boundingBox":{"x1":-1,"y1":0,"x2":22,"y2":26},"originX":564.25,"originY":0}',
-            '{"characterWidth":34,"characterHeight":34,"ascender":35,"descender":-8,"textWidth":580.5,"textHeight":215,"maxHorizontalAdvance":44,"boundingBox":{"x1":-0.5,"y1":0,"x2":22,"y2":27},"originX":580.25,"originY":0}',
-            '{"characterWidth":33,"characterHeight":33,"ascender":34,"descender":-7,"textWidth":565,"textHeight":205,"maxHorizontalAdvance":42,"boundingBox":{"x1":-1,"y1":0,"x2":22,"y2":26},"originX":564.25,"originY":0}',
-            '{"characterWidth":32,"characterHeight":32,"ascender":33,"descender":-7,"textWidth":548,"textHeight":200,"maxHorizontalAdvance":41,"boundingBox":{"x1":-1,"y1":0,"x2":21,"y2":25},"originX":547.25,"originY":0}',
-            '{"characterWidth":31,"characterHeight":31,"ascender":32,"descender":-7,"textWidth":529.5,"textHeight":195,"maxHorizontalAdvance":40,"boundingBox":{"x1":-0.5,"y1":0,"x2":20,"y2":25},"originX":529.25,"originY":0}',
-            '{"characterWidth":30,"characterHeight":30,"ascender":31,"descender":-7,"textWidth":511.5,"textHeight":190,"maxHorizontalAdvance":39,"boundingBox":{"x1":-0.5,"y1":0,"x2":20,"y2":24},"originX":511.25,"originY":0}',
-            '{"characterWidth":29,"characterHeight":29,"ascender":30,"descender":-7,"textWidth":497,"textHeight":185,"maxHorizontalAdvance":37,"boundingBox":{"x1":-1,"y1":0,"x2":19,"y2":23},"originX":496.25,"originY":0}'
+            '{"characterWidth":1,"characterHeight":1,"ascender":2,"descender":-1,"textWidth":153,"textHeight":1,"maxHorizontalAdvance":1,"boundingBox":{"x1":0,"y1":-0.015625,"x2":0.8125,"y2":0.8125},"originX":152.484375,"originY":0}',
+            '{"characterWidth":4,"characterHeight":4,"ascender":5,"descender":-1,"textWidth":354.03125,"textHeight":5,"maxHorizontalAdvance":5,"boundingBox":{"x1":-0.03125,"y1":-0.0625,"x2":3.265625,"y2":3.234375},"originX":353.484375,"originY":0}',
+            '{"characterWidth":6,"characterHeight":6,"ascender":7,"descender":-2,"textWidth":465.03125,"textHeight":7,"maxHorizontalAdvance":8,"boundingBox":{"x1":-0.03125,"y1":-0.09375,"x2":4.890625,"y2":4.84375},"originX":464.484375,"originY":0}',
+            '{"characterWidth":8,"characterHeight":8,"ascender":9,"descender":-2,"textWidth":568.046875,"textHeight":10,"maxHorizontalAdvance":10,"boundingBox":{"x1":-0.046875,"y1":-0.140625,"x2":6.515625,"y2":6.453125},"originX":567.484375,"originY":0}',
+            '{"characterWidth":9,"characterHeight":9,"ascender":10,"descender":-2,"textWidth":686,"textHeight":11,"maxHorizontalAdvance":12,"boundingBox":{"x1":0,"y1":0,"x2":6,"y2":7},"originX":686.484375,"originY":0}',
+            '{"characterWidth":10,"characterHeight":10,"ascender":11,"descender":-3,"textWidth":734,"textHeight":12,"maxHorizontalAdvance":13,"boundingBox":{"x1":0,"y1":0,"x2":7,"y2":8},"originX":734.484375,"originY":0}',
+            '{"characterWidth":11,"characterHeight":11,"ascender":12,"descender":-3,"textWidth":389,"textHeight":45,"maxHorizontalAdvance":14,"boundingBox":{"x1":-1,"y1":0,"x2":7,"y2":9},"originX":388.828125,"originY":0}',
+            '{"characterWidth":13,"characterHeight":13,"ascender":14,"descender":-3,"textWidth":438,"textHeight":51,"maxHorizontalAdvance":17,"boundingBox":{"x1":0,"y1":0,"x2":8,"y2":10},"originX":437.828125,"originY":0}',
+            '{"characterWidth":15,"characterHeight":15,"ascender":16,"descender":-4,"textWidth":500.5,"textHeight":60,"maxHorizontalAdvance":19,"boundingBox":{"x1":-0.5,"y1":0,"x2":10,"y2":12},"originX":499.828125,"originY":0}',
+            '{"characterWidth":16,"characterHeight":16,"ascender":17,"descender":-4,"textWidth":535,"textHeight":63,"maxHorizontalAdvance":21,"boundingBox":{"x1":-1,"y1":0,"x2":10,"y2":13},"originX":533.828125,"originY":0}',
+            '{"characterWidth":17,"characterHeight":17,"ascender":18,"descender":-4,"textWidth":566,"textHeight":66,"maxHorizontalAdvance":22,"boundingBox":{"x1":0,"y1":0,"x2":11,"y2":13},"originX":565.828125,"originY":0}',
+            '{"characterWidth":18,"characterHeight":18,"ascender":19,"descender":-4,"textWidth":590,"textHeight":69,"maxHorizontalAdvance":23,"boundingBox":{"x1":0,"y1":0,"x2":12,"y2":14},"originX":589.828125,"originY":0}',
+            '{"characterWidth":19,"characterHeight":19,"ascender":20,"descender":-5,"textWidth":626.5,"textHeight":75,"maxHorizontalAdvance":24,"boundingBox":{"x1":-0.5,"y1":0,"x2":13,"y2":15},"originX":625.828125,"originY":0}',
+            '{"characterWidth":20,"characterHeight":20,"ascender":21,"descender":-5,"textWidth":441.5,"textHeight":104,"maxHorizontalAdvance":26,"boundingBox":{"x1":-0.5,"y1":0,"x2":12,"y2":16},"originX":441.703125,"originY":0}',
+            '{"characterWidth":22,"characterHeight":22,"ascender":23,"descender":-5,"textWidth":479.5,"textHeight":112,"maxHorizontalAdvance":28,"boundingBox":{"x1":-0.5,"y1":0,"x2":15,"y2":17},"originX":478.703125,"originY":0}',
+            '{"characterWidth":23,"characterHeight":23,"ascender":24,"descender":-5,"textWidth":509.5,"textHeight":116,"maxHorizontalAdvance":30,"boundingBox":{"x1":-0.5,"y1":0,"x2":14,"y2":18},"originX":509.703125,"originY":0}',
+            '{"characterWidth":24,"characterHeight":24,"ascender":25,"descender":-6,"textWidth":517,"textHeight":124,"maxHorizontalAdvance":31,"boundingBox":{"x1":0,"y1":0,"x2":15,"y2":19},"originX":517.703125,"originY":0}',
+            '{"characterWidth":25,"characterHeight":25,"ascender":26,"descender":-6,"textWidth":539,"textHeight":128,"maxHorizontalAdvance":32,"boundingBox":{"x1":0,"y1":0,"x2":16,"y2":20},"originX":539.703125,"originY":0}',
+            '{"characterWidth":26,"characterHeight":26,"ascender":27,"descender":-6,"textWidth":561.5,"textHeight":132,"maxHorizontalAdvance":33,"boundingBox":{"x1":-0.5,"y1":0,"x2":17,"y2":21},"originX":561.703125,"originY":0}',
+            '{"characterWidth":27,"characterHeight":27,"ascender":28,"descender":-6,"textWidth":588.5,"textHeight":136,"maxHorizontalAdvance":35,"boundingBox":{"x1":-0.5,"y1":0,"x2":17,"y2":21},"originX":588.703125,"originY":0}',
+            '{"characterWidth":28,"characterHeight":28,"ascender":29,"descender":-6,"textWidth":604,"textHeight":140,"maxHorizontalAdvance":36,"boundingBox":{"x1":-1,"y1":0,"x2":18,"y2":22},"originX":603.703125,"originY":0}',
+            '{"characterWidth":29,"characterHeight":29,"ascender":30,"descender":-7,"textWidth":625,"textHeight":148,"maxHorizontalAdvance":37,"boundingBox":{"x1":-1,"y1":0,"x2":19,"y2":23},"originX":624.703125,"originY":0}'
         );
 
         foreach( $properties as $i => $returnVal )
@@ -320,7 +310,7 @@ class CaptionTest extends \PHPUnit_Framework_TestCase
             'ImagickDraw',
             array(
                  'setFont', 'setFontSize', 'setFontWeight',
-                 'setStrokeColor', 'setStrokeAntialias', 'setStrokeAlpha',
+                 'setStrokeColor', 'setStrokeAntialias', 'setStrokeAlpha', 'setStrokeWidth',
                  'setTextAntialias', 'setTextAlignment', 'setTextKerning', 'setGravity', 'setFillColor'
             ),
             array()
@@ -335,7 +325,7 @@ class CaptionTest extends \PHPUnit_Framework_TestCase
         $drawLayer = $object->getDrawLayer();
 
         $this->assertEquals( $draw, $drawLayer );
-        $this->assertEquals( 25, $object->getFontSize() );
+        $this->assertEquals( 26, $object->getFontSize() );
     }
 
     /**
@@ -391,7 +381,7 @@ class CaptionTest extends \PHPUnit_Framework_TestCase
             'ImagickDraw',
             array(
                  'setFont', 'setFontSize', 'setFontWeight',
-                 'setStrokeColor', 'setStrokeAntialias', 'setStrokeAlpha',
+                 'setStrokeColor', 'setStrokeAntialias', 'setStrokeAlpha', 'setStrokeWidth',
                  'setTextAntialias', 'setTextAlignment', 'setTextKerning', 'setGravity', 'setFillColor'
             ),
             array()
@@ -426,21 +416,22 @@ class CaptionTest extends \PHPUnit_Framework_TestCase
         $imagick->expects( $this->any() )->method( 'getImageGeometry' )->will( $this->returnValue( array( 'width' => 283, 'height' => 445 ) ) );
 
         $properties = array(
-            '{"characterWidth":1,"characterHeight":1,"ascender":2,"descender":-1,"textWidth":79,"textHeight":1,"maxHorizontalAdvance":1,"boundingBox":{"x1":0,"y1":-0.015625,"x2":0.8125,"y2":0.8125},"originX":79.25,"originY":0}',
-            '{"characterWidth":3,"characterHeight":3,"ascender":4,"descender":-1,"textWidth":139.015625,"textHeight":4,"maxHorizontalAdvance":4,"boundingBox":{"x1":-0.015625,"y1":-0.046875,"x2":2.4375,"y2":2.421875},"originX":139.25,"originY":0}',
-            '{"characterWidth":5,"characterHeight":5,"ascender":6,"descender":-2,"textWidth":187.03125,"textHeight":6,"maxHorizontalAdvance":6,"boundingBox":{"x1":-0.03125,"y1":-0.078125,"x2":4.078125,"y2":4.03125},"originX":187.25,"originY":0}',
-            '{"characterWidth":7,"characterHeight":7,"ascender":8,"descender":-2,"textWidth":240.046875,"textHeight":9,"maxHorizontalAdvance":9,"boundingBox":{"x1":-0.046875,"y1":-0.109375,"x2":5.703125,"y2":5.65625},"originX":240.25,"originY":0}',
-            '{"characterWidth":8,"characterHeight":8,"ascender":9,"descender":-2,"textWidth":249.046875,"textHeight":10,"maxHorizontalAdvance":10,"boundingBox":{"x1":-0.046875,"y1":-0.140625,"x2":6.515625,"y2":6.453125},"originX":248.25,"originY":0}',
-            '{"characterWidth":9,"characterHeight":9,"ascender":10,"descender":-2,"textWidth":298,"textHeight":11,"maxHorizontalAdvance":12,"boundingBox":{"x1":0,"y1":0,"x2":6,"y2":7},"originX":298.25,"originY":0}',
-            '{"characterWidth":10,"characterHeight":10,"ascender":11,"descender":-3,"textWidth":311,"textHeight":12,"maxHorizontalAdvance":13,"boundingBox":{"x1":0,"y1":0,"x2":7,"y2":8},"originX":311.25,"originY":0}',
-            '{"characterWidth":11,"characterHeight":11,"ascender":12,"descender":-3,"textWidth":153,"textHeight":45,"maxHorizontalAdvance":14,"boundingBox":{"x1":-1,"y1":0,"x2":8,"y2":9},"originX":152.25,"originY":0}',
-            '{"characterWidth":13,"characterHeight":13,"ascender":14,"descender":-3,"textWidth":176,"textHeight":51,"maxHorizontalAdvance":17,"boundingBox":{"x1":0,"y1":0,"x2":10,"y2":10},"originX":176.25,"originY":0}',
-            '{"characterWidth":15,"characterHeight":15,"ascender":16,"descender":-4,"textWidth":198.5,"textHeight":60,"maxHorizontalAdvance":19,"boundingBox":{"x1":-0.5,"y1":0,"x2":11,"y2":12},"originX":198.25,"originY":0}',
-            '{"characterWidth":17,"characterHeight":17,"ascender":18,"descender":-4,"textWidth":222,"textHeight":66,"maxHorizontalAdvance":22,"boundingBox":{"x1":0,"y1":0,"x2":13,"y2":13},"originX":222.25,"originY":0}',
-            '{"characterWidth":18,"characterHeight":18,"ascender":19,"descender":-4,"textWidth":234,"textHeight":69,"maxHorizontalAdvance":23,"boundingBox":{"x1":0,"y1":0,"x2":14,"y2":14},"originX":234.25,"originY":0}',
-            '{"characterWidth":19,"characterHeight":19,"ascender":20,"descender":-5,"textWidth":244.5,"textHeight":75,"maxHorizontalAdvance":24,"boundingBox":{"x1":-0.5,"y1":0,"x2":14,"y2":15},"originX":244.25,"originY":0}',
-            '{"characterWidth":20,"characterHeight":20,"ascender":21,"descender":-5,"textWidth":262.5,"textHeight":78,"maxHorizontalAdvance":26,"boundingBox":{"x1":-0.5,"y1":0,"x2":15,"y2":16},"originX":262.25,"originY":0}',
-            '{"characterWidth":21,"characterHeight":21,"ascender":22,"descender":-5,"textWidth":272,"textHeight":81,"maxHorizontalAdvance":27,"boundingBox":{"x1":0,"y1":0,"x2":15,"y2":17},"originX":272.25,"originY":0}'
+            '{"characterWidth":1,"characterHeight":1,"ascender":2,"descender":-1,"textWidth":68,"textHeight":1,"maxHorizontalAdvance":1,"boundingBox":{"x1":0,"y1":-0.015625,"x2":0.8125,"y2":0.8125},"originX":68.265625,"originY":0}',
+            '{"characterWidth":4,"characterHeight":4,"ascender":5,"descender":-1,"textWidth":141.03125,"textHeight":5,"maxHorizontalAdvance":5,"boundingBox":{"x1":-0.03125,"y1":-0.0625,"x2":3.265625,"y2":3.234375},"originX":140.265625,"originY":0}',
+            '{"characterWidth":6,"characterHeight":6,"ascender":7,"descender":-2,"textWidth":191.03125,"textHeight":7,"maxHorizontalAdvance":8,"boundingBox":{"x1":-0.03125,"y1":-0.09375,"x2":4.890625,"y2":4.84375},"originX":190.265625,"originY":0}',
+            '{"characterWidth":8,"characterHeight":8,"ascender":9,"descender":-2,"textWidth":238.046875,"textHeight":10,"maxHorizontalAdvance":10,"boundingBox":{"x1":-0.046875,"y1":-0.140625,"x2":6.515625,"y2":6.453125},"originX":237.265625,"originY":0}',
+            '{"characterWidth":9,"characterHeight":9,"ascender":10,"descender":-2,"textWidth":287,"textHeight":11,"maxHorizontalAdvance":12,"boundingBox":{"x1":0,"y1":0,"x2":6,"y2":7},"originX":287.265625,"originY":0}',
+            '{"characterWidth":10,"characterHeight":10,"ascender":11,"descender":-3,"textWidth":301,"textHeight":12,"maxHorizontalAdvance":13,"boundingBox":{"x1":0,"y1":0,"x2":7,"y2":8},"originX":301.265625,"originY":0}',
+            '{"characterWidth":11,"characterHeight":11,"ascender":12,"descender":-3,"textWidth":147,"textHeight":45,"maxHorizontalAdvance":14,"boundingBox":{"x1":-1,"y1":0,"x2":8,"y2":9},"originX":146.765625,"originY":0}',
+            '{"characterWidth":13,"characterHeight":13,"ascender":14,"descender":-3,"textWidth":170,"textHeight":51,"maxHorizontalAdvance":17,"boundingBox":{"x1":0,"y1":0,"x2":10,"y2":10},"originX":170.765625,"originY":0}',
+            '{"characterWidth":15,"characterHeight":15,"ascender":16,"descender":-4,"textWidth":192.5,"textHeight":60,"maxHorizontalAdvance":19,"boundingBox":{"x1":-0.5,"y1":0,"x2":11,"y2":12},"originX":192.765625,"originY":0}',
+            '{"characterWidth":17,"characterHeight":17,"ascender":18,"descender":-4,"textWidth":216,"textHeight":66,"maxHorizontalAdvance":22,"boundingBox":{"x1":0,"y1":0,"x2":13,"y2":13},"originX":216.765625,"originY":0}',
+            '{"characterWidth":18,"characterHeight":18,"ascender":19,"descender":-4,"textWidth":228,"textHeight":69,"maxHorizontalAdvance":23,"boundingBox":{"x1":0,"y1":0,"x2":14,"y2":14},"originX":228.765625,"originY":0}',
+            '{"characterWidth":19,"characterHeight":19,"ascender":20,"descender":-5,"textWidth":239.5,"textHeight":75,"maxHorizontalAdvance":24,"boundingBox":{"x1":-0.5,"y1":0,"x2":14,"y2":15},"originX":239.765625,"originY":0}',
+            '{"characterWidth":20,"characterHeight":20,"ascender":21,"descender":-5,"textWidth":256.5,"textHeight":78,"maxHorizontalAdvance":26,"boundingBox":{"x1":-0.5,"y1":0,"x2":15,"y2":16},"originX":256.765625,"originY":0}',
+            '{"characterWidth":21,"characterHeight":21,"ascender":22,"descender":-5,"textWidth":267,"textHeight":81,"maxHorizontalAdvance":27,"boundingBox":{"x1":0,"y1":0,"x2":15,"y2":17},"originX":267.765625,"originY":0}',
+            '{"characterWidth":22,"characterHeight":22,"ascender":23,"descender":-5,"textWidth":274.5,"textHeight":84,"maxHorizontalAdvance":28,"boundingBox":{"x1":-0.5,"y1":0,"x2":17,"y2":17},"originX":274.765625,"originY":0}',
+            '{"characterWidth":23,"characterHeight":23,"ascender":24,"descender":-5,"textWidth":294.5,"textHeight":87,"maxHorizontalAdvance":30,"boundingBox":{"x1":-0.5,"y1":0,"x2":17,"y2":18},"originX":294.765625,"originY":0}'
         );
 
         foreach( $properties as $i => $returnVal )
@@ -457,7 +448,7 @@ class CaptionTest extends \PHPUnit_Framework_TestCase
             'ImagickDraw',
             array(
                  'setFont', 'setFontSize', 'setFontWeight',
-                 'setStrokeColor', 'setStrokeAntialias', 'setStrokeAlpha',
+                 'setStrokeColor', 'setStrokeAntialias', 'setStrokeAlpha', 'setStrokeWidth',
                  'setTextAntialias', 'setTextAlignment', 'setTextKerning', 'setGravity', 'setFillColor'
             ),
             array()
@@ -472,7 +463,7 @@ class CaptionTest extends \PHPUnit_Framework_TestCase
         $drawLayer = $object->getDrawLayer();
 
         $this->assertEquals( $draw, $drawLayer );
-        $this->assertEquals( 19, $object->getFontSize() );
+        $this->assertEquals( 21, $object->getFontSize() );
     }
 
     /**
@@ -485,21 +476,22 @@ class CaptionTest extends \PHPUnit_Framework_TestCase
         $imagick->expects( $this->any() )->method( 'getImageGeometry' )->will( $this->returnValue( array( 'width' => 283, 'height' => 445 ) ) );
 
         $properties = array(
-            '{"characterWidth":1,"characterHeight":1,"ascender":2,"descender":-1,"textWidth":79,"textHeight":1,"maxHorizontalAdvance":1,"boundingBox":{"x1":0,"y1":-0.015625,"x2":0.8125,"y2":0.8125},"originX":79.25,"originY":0}',
-            '{"characterWidth":3,"characterHeight":3,"ascender":4,"descender":-1,"textWidth":139.015625,"textHeight":4,"maxHorizontalAdvance":4,"boundingBox":{"x1":-0.015625,"y1":-0.046875,"x2":2.4375,"y2":2.421875},"originX":139.25,"originY":0}',
-            '{"characterWidth":5,"characterHeight":5,"ascender":6,"descender":-2,"textWidth":187.03125,"textHeight":6,"maxHorizontalAdvance":6,"boundingBox":{"x1":-0.03125,"y1":-0.078125,"x2":4.078125,"y2":4.03125},"originX":187.25,"originY":0}',
-            '{"characterWidth":7,"characterHeight":7,"ascender":8,"descender":-2,"textWidth":240.046875,"textHeight":9,"maxHorizontalAdvance":9,"boundingBox":{"x1":-0.046875,"y1":-0.109375,"x2":5.703125,"y2":5.65625},"originX":240.25,"originY":0}',
-            '{"characterWidth":8,"characterHeight":8,"ascender":9,"descender":-2,"textWidth":249.046875,"textHeight":10,"maxHorizontalAdvance":10,"boundingBox":{"x1":-0.046875,"y1":-0.140625,"x2":6.515625,"y2":6.453125},"originX":248.25,"originY":0}',
-            '{"characterWidth":9,"characterHeight":9,"ascender":10,"descender":-2,"textWidth":298,"textHeight":11,"maxHorizontalAdvance":12,"boundingBox":{"x1":0,"y1":0,"x2":6,"y2":7},"originX":298.25,"originY":0}',
-            '{"characterWidth":10,"characterHeight":10,"ascender":11,"descender":-3,"textWidth":311,"textHeight":12,"maxHorizontalAdvance":13,"boundingBox":{"x1":0,"y1":0,"x2":7,"y2":8},"originX":311.25,"originY":0}',
-            '{"characterWidth":11,"characterHeight":11,"ascender":12,"descender":-3,"textWidth":153,"textHeight":45,"maxHorizontalAdvance":14,"boundingBox":{"x1":-1,"y1":0,"x2":8,"y2":9},"originX":152.25,"originY":0}',
-            '{"characterWidth":13,"characterHeight":13,"ascender":14,"descender":-3,"textWidth":176,"textHeight":51,"maxHorizontalAdvance":17,"boundingBox":{"x1":0,"y1":0,"x2":10,"y2":10},"originX":176.25,"originY":0}',
-            '{"characterWidth":15,"characterHeight":15,"ascender":16,"descender":-4,"textWidth":198.5,"textHeight":60,"maxHorizontalAdvance":19,"boundingBox":{"x1":-0.5,"y1":0,"x2":11,"y2":12},"originX":198.25,"originY":0}',
-            '{"characterWidth":17,"characterHeight":17,"ascender":18,"descender":-4,"textWidth":222,"textHeight":66,"maxHorizontalAdvance":22,"boundingBox":{"x1":0,"y1":0,"x2":13,"y2":13},"originX":222.25,"originY":0}',
-            '{"characterWidth":18,"characterHeight":18,"ascender":19,"descender":-4,"textWidth":234,"textHeight":69,"maxHorizontalAdvance":23,"boundingBox":{"x1":0,"y1":0,"x2":14,"y2":14},"originX":234.25,"originY":0}',
-            '{"characterWidth":19,"characterHeight":19,"ascender":20,"descender":-5,"textWidth":244.5,"textHeight":75,"maxHorizontalAdvance":24,"boundingBox":{"x1":-0.5,"y1":0,"x2":14,"y2":15},"originX":244.25,"originY":0}',
-            '{"characterWidth":20,"characterHeight":20,"ascender":21,"descender":-5,"textWidth":262.5,"textHeight":78,"maxHorizontalAdvance":26,"boundingBox":{"x1":-0.5,"y1":0,"x2":15,"y2":16},"originX":262.25,"originY":0}',
-            '{"characterWidth":21,"characterHeight":21,"ascender":22,"descender":-5,"textWidth":272,"textHeight":81,"maxHorizontalAdvance":27,"boundingBox":{"x1":0,"y1":0,"x2":15,"y2":17},"originX":272.25,"originY":0}'
+            '{"characterWidth":1,"characterHeight":1,"ascender":2,"descender":-1,"textWidth":68,"textHeight":1,"maxHorizontalAdvance":1,"boundingBox":{"x1":0,"y1":-0.015625,"x2":0.8125,"y2":0.8125},"originX":68.265625,"originY":0}',
+            '{"characterWidth":4,"characterHeight":4,"ascender":5,"descender":-1,"textWidth":141.03125,"textHeight":5,"maxHorizontalAdvance":5,"boundingBox":{"x1":-0.03125,"y1":-0.0625,"x2":3.265625,"y2":3.234375},"originX":140.265625,"originY":0}',
+            '{"characterWidth":6,"characterHeight":6,"ascender":7,"descender":-2,"textWidth":191.03125,"textHeight":7,"maxHorizontalAdvance":8,"boundingBox":{"x1":-0.03125,"y1":-0.09375,"x2":4.890625,"y2":4.84375},"originX":190.265625,"originY":0}',
+            '{"characterWidth":8,"characterHeight":8,"ascender":9,"descender":-2,"textWidth":238.046875,"textHeight":10,"maxHorizontalAdvance":10,"boundingBox":{"x1":-0.046875,"y1":-0.140625,"x2":6.515625,"y2":6.453125},"originX":237.265625,"originY":0}',
+            '{"characterWidth":9,"characterHeight":9,"ascender":10,"descender":-2,"textWidth":287,"textHeight":11,"maxHorizontalAdvance":12,"boundingBox":{"x1":0,"y1":0,"x2":6,"y2":7},"originX":287.265625,"originY":0}',
+            '{"characterWidth":10,"characterHeight":10,"ascender":11,"descender":-3,"textWidth":301,"textHeight":12,"maxHorizontalAdvance":13,"boundingBox":{"x1":0,"y1":0,"x2":7,"y2":8},"originX":301.265625,"originY":0}',
+            '{"characterWidth":11,"characterHeight":11,"ascender":12,"descender":-3,"textWidth":147,"textHeight":45,"maxHorizontalAdvance":14,"boundingBox":{"x1":-1,"y1":0,"x2":8,"y2":9},"originX":146.765625,"originY":0}',
+            '{"characterWidth":13,"characterHeight":13,"ascender":14,"descender":-3,"textWidth":170,"textHeight":51,"maxHorizontalAdvance":17,"boundingBox":{"x1":0,"y1":0,"x2":10,"y2":10},"originX":170.765625,"originY":0}',
+            '{"characterWidth":15,"characterHeight":15,"ascender":16,"descender":-4,"textWidth":192.5,"textHeight":60,"maxHorizontalAdvance":19,"boundingBox":{"x1":-0.5,"y1":0,"x2":11,"y2":12},"originX":192.765625,"originY":0}',
+            '{"characterWidth":17,"characterHeight":17,"ascender":18,"descender":-4,"textWidth":216,"textHeight":66,"maxHorizontalAdvance":22,"boundingBox":{"x1":0,"y1":0,"x2":13,"y2":13},"originX":216.765625,"originY":0}',
+            '{"characterWidth":18,"characterHeight":18,"ascender":19,"descender":-4,"textWidth":228,"textHeight":69,"maxHorizontalAdvance":23,"boundingBox":{"x1":0,"y1":0,"x2":14,"y2":14},"originX":228.765625,"originY":0}',
+            '{"characterWidth":19,"characterHeight":19,"ascender":20,"descender":-5,"textWidth":239.5,"textHeight":75,"maxHorizontalAdvance":24,"boundingBox":{"x1":-0.5,"y1":0,"x2":14,"y2":15},"originX":239.765625,"originY":0}',
+            '{"characterWidth":20,"characterHeight":20,"ascender":21,"descender":-5,"textWidth":256.5,"textHeight":78,"maxHorizontalAdvance":26,"boundingBox":{"x1":-0.5,"y1":0,"x2":15,"y2":16},"originX":256.765625,"originY":0}',
+            '{"characterWidth":21,"characterHeight":21,"ascender":22,"descender":-5,"textWidth":267,"textHeight":81,"maxHorizontalAdvance":27,"boundingBox":{"x1":0,"y1":0,"x2":15,"y2":17},"originX":267.765625,"originY":0}',
+            '{"characterWidth":22,"characterHeight":22,"ascender":23,"descender":-5,"textWidth":274.5,"textHeight":84,"maxHorizontalAdvance":28,"boundingBox":{"x1":-0.5,"y1":0,"x2":17,"y2":17},"originX":274.765625,"originY":0}',
+            '{"characterWidth":23,"characterHeight":23,"ascender":24,"descender":-5,"textWidth":294.5,"textHeight":87,"maxHorizontalAdvance":30,"boundingBox":{"x1":-0.5,"y1":0,"x2":17,"y2":18},"originX":294.765625,"originY":0}'
         );
 
         foreach( $properties as $i => $returnVal )
@@ -516,7 +508,7 @@ class CaptionTest extends \PHPUnit_Framework_TestCase
             'ImagickDraw',
             array(
                  'setFont', 'setFontSize', 'setFontWeight',
-                 'setStrokeColor', 'setStrokeAntialias', 'setStrokeAlpha',
+                 'setStrokeColor', 'setStrokeAntialias', 'setStrokeAlpha', 'setStrokeWidth',
                  'setTextAntialias', 'setTextAlignment', 'setTextKerning', 'setGravity', 'setFillColor'
             ),
             array()
@@ -530,7 +522,7 @@ class CaptionTest extends \PHPUnit_Framework_TestCase
 
         $object->annotateImage();
 
-        $this->assertEquals( 19, $object->getFontSize() );
+        $this->assertEquals( 21, $object->getFontSize() );
     }
 
     /**
@@ -543,21 +535,22 @@ class CaptionTest extends \PHPUnit_Framework_TestCase
         $imagick->expects( $this->any() )->method( 'getImageGeometry' )->will( $this->returnValue( array( 'width' => 283, 'height' => 445 ) ) );
 
         $properties = array(
-            '{"characterWidth":1,"characterHeight":1,"ascender":2,"descender":-1,"textWidth":79,"textHeight":1,"maxHorizontalAdvance":1,"boundingBox":{"x1":0,"y1":-0.015625,"x2":0.8125,"y2":0.8125},"originX":79.25,"originY":0}',
-            '{"characterWidth":3,"characterHeight":3,"ascender":4,"descender":-1,"textWidth":139.015625,"textHeight":4,"maxHorizontalAdvance":4,"boundingBox":{"x1":-0.015625,"y1":-0.046875,"x2":2.4375,"y2":2.421875},"originX":139.25,"originY":0}',
-            '{"characterWidth":5,"characterHeight":5,"ascender":6,"descender":-2,"textWidth":187.03125,"textHeight":6,"maxHorizontalAdvance":6,"boundingBox":{"x1":-0.03125,"y1":-0.078125,"x2":4.078125,"y2":4.03125},"originX":187.25,"originY":0}',
-            '{"characterWidth":7,"characterHeight":7,"ascender":8,"descender":-2,"textWidth":240.046875,"textHeight":9,"maxHorizontalAdvance":9,"boundingBox":{"x1":-0.046875,"y1":-0.109375,"x2":5.703125,"y2":5.65625},"originX":240.25,"originY":0}',
-            '{"characterWidth":8,"characterHeight":8,"ascender":9,"descender":-2,"textWidth":249.046875,"textHeight":10,"maxHorizontalAdvance":10,"boundingBox":{"x1":-0.046875,"y1":-0.140625,"x2":6.515625,"y2":6.453125},"originX":248.25,"originY":0}',
-            '{"characterWidth":9,"characterHeight":9,"ascender":10,"descender":-2,"textWidth":298,"textHeight":11,"maxHorizontalAdvance":12,"boundingBox":{"x1":0,"y1":0,"x2":6,"y2":7},"originX":298.25,"originY":0}',
-            '{"characterWidth":10,"characterHeight":10,"ascender":11,"descender":-3,"textWidth":311,"textHeight":12,"maxHorizontalAdvance":13,"boundingBox":{"x1":0,"y1":0,"x2":7,"y2":8},"originX":311.25,"originY":0}',
-            '{"characterWidth":11,"characterHeight":11,"ascender":12,"descender":-3,"textWidth":153,"textHeight":45,"maxHorizontalAdvance":14,"boundingBox":{"x1":-1,"y1":0,"x2":8,"y2":9},"originX":152.25,"originY":0}',
-            '{"characterWidth":13,"characterHeight":13,"ascender":14,"descender":-3,"textWidth":176,"textHeight":51,"maxHorizontalAdvance":17,"boundingBox":{"x1":0,"y1":0,"x2":10,"y2":10},"originX":176.25,"originY":0}',
-            '{"characterWidth":15,"characterHeight":15,"ascender":16,"descender":-4,"textWidth":198.5,"textHeight":60,"maxHorizontalAdvance":19,"boundingBox":{"x1":-0.5,"y1":0,"x2":11,"y2":12},"originX":198.25,"originY":0}',
-            '{"characterWidth":17,"characterHeight":17,"ascender":18,"descender":-4,"textWidth":222,"textHeight":66,"maxHorizontalAdvance":22,"boundingBox":{"x1":0,"y1":0,"x2":13,"y2":13},"originX":222.25,"originY":0}',
-            '{"characterWidth":18,"characterHeight":18,"ascender":19,"descender":-4,"textWidth":234,"textHeight":69,"maxHorizontalAdvance":23,"boundingBox":{"x1":0,"y1":0,"x2":14,"y2":14},"originX":234.25,"originY":0}',
-            '{"characterWidth":19,"characterHeight":19,"ascender":20,"descender":-5,"textWidth":244.5,"textHeight":75,"maxHorizontalAdvance":24,"boundingBox":{"x1":-0.5,"y1":0,"x2":14,"y2":15},"originX":244.25,"originY":0}',
-            '{"characterWidth":20,"characterHeight":20,"ascender":21,"descender":-5,"textWidth":262.5,"textHeight":78,"maxHorizontalAdvance":26,"boundingBox":{"x1":-0.5,"y1":0,"x2":15,"y2":16},"originX":262.25,"originY":0}',
-            '{"characterWidth":21,"characterHeight":21,"ascender":22,"descender":-5,"textWidth":272,"textHeight":81,"maxHorizontalAdvance":27,"boundingBox":{"x1":0,"y1":0,"x2":15,"y2":17},"originX":272.25,"originY":0}'
+            '{"characterWidth":1,"characterHeight":1,"ascender":2,"descender":-1,"textWidth":68,"textHeight":1,"maxHorizontalAdvance":1,"boundingBox":{"x1":0,"y1":-0.015625,"x2":0.8125,"y2":0.8125},"originX":68.265625,"originY":0}',
+            '{"characterWidth":4,"characterHeight":4,"ascender":5,"descender":-1,"textWidth":141.03125,"textHeight":5,"maxHorizontalAdvance":5,"boundingBox":{"x1":-0.03125,"y1":-0.0625,"x2":3.265625,"y2":3.234375},"originX":140.265625,"originY":0}',
+            '{"characterWidth":6,"characterHeight":6,"ascender":7,"descender":-2,"textWidth":191.03125,"textHeight":7,"maxHorizontalAdvance":8,"boundingBox":{"x1":-0.03125,"y1":-0.09375,"x2":4.890625,"y2":4.84375},"originX":190.265625,"originY":0}',
+            '{"characterWidth":8,"characterHeight":8,"ascender":9,"descender":-2,"textWidth":238.046875,"textHeight":10,"maxHorizontalAdvance":10,"boundingBox":{"x1":-0.046875,"y1":-0.140625,"x2":6.515625,"y2":6.453125},"originX":237.265625,"originY":0}',
+            '{"characterWidth":9,"characterHeight":9,"ascender":10,"descender":-2,"textWidth":287,"textHeight":11,"maxHorizontalAdvance":12,"boundingBox":{"x1":0,"y1":0,"x2":6,"y2":7},"originX":287.265625,"originY":0}',
+            '{"characterWidth":10,"characterHeight":10,"ascender":11,"descender":-3,"textWidth":301,"textHeight":12,"maxHorizontalAdvance":13,"boundingBox":{"x1":0,"y1":0,"x2":7,"y2":8},"originX":301.265625,"originY":0}',
+            '{"characterWidth":11,"characterHeight":11,"ascender":12,"descender":-3,"textWidth":147,"textHeight":45,"maxHorizontalAdvance":14,"boundingBox":{"x1":-1,"y1":0,"x2":8,"y2":9},"originX":146.765625,"originY":0}',
+            '{"characterWidth":13,"characterHeight":13,"ascender":14,"descender":-3,"textWidth":170,"textHeight":51,"maxHorizontalAdvance":17,"boundingBox":{"x1":0,"y1":0,"x2":10,"y2":10},"originX":170.765625,"originY":0}',
+            '{"characterWidth":15,"characterHeight":15,"ascender":16,"descender":-4,"textWidth":192.5,"textHeight":60,"maxHorizontalAdvance":19,"boundingBox":{"x1":-0.5,"y1":0,"x2":11,"y2":12},"originX":192.765625,"originY":0}',
+            '{"characterWidth":17,"characterHeight":17,"ascender":18,"descender":-4,"textWidth":216,"textHeight":66,"maxHorizontalAdvance":22,"boundingBox":{"x1":0,"y1":0,"x2":13,"y2":13},"originX":216.765625,"originY":0}',
+            '{"characterWidth":18,"characterHeight":18,"ascender":19,"descender":-4,"textWidth":228,"textHeight":69,"maxHorizontalAdvance":23,"boundingBox":{"x1":0,"y1":0,"x2":14,"y2":14},"originX":228.765625,"originY":0}',
+            '{"characterWidth":19,"characterHeight":19,"ascender":20,"descender":-5,"textWidth":239.5,"textHeight":75,"maxHorizontalAdvance":24,"boundingBox":{"x1":-0.5,"y1":0,"x2":14,"y2":15},"originX":239.765625,"originY":0}',
+            '{"characterWidth":20,"characterHeight":20,"ascender":21,"descender":-5,"textWidth":256.5,"textHeight":78,"maxHorizontalAdvance":26,"boundingBox":{"x1":-0.5,"y1":0,"x2":15,"y2":16},"originX":256.765625,"originY":0}',
+            '{"characterWidth":21,"characterHeight":21,"ascender":22,"descender":-5,"textWidth":267,"textHeight":81,"maxHorizontalAdvance":27,"boundingBox":{"x1":0,"y1":0,"x2":15,"y2":17},"originX":267.765625,"originY":0}',
+            '{"characterWidth":22,"characterHeight":22,"ascender":23,"descender":-5,"textWidth":274.5,"textHeight":84,"maxHorizontalAdvance":28,"boundingBox":{"x1":-0.5,"y1":0,"x2":17,"y2":17},"originX":274.765625,"originY":0}',
+            '{"characterWidth":23,"characterHeight":23,"ascender":24,"descender":-5,"textWidth":294.5,"textHeight":87,"maxHorizontalAdvance":30,"boundingBox":{"x1":-0.5,"y1":0,"x2":17,"y2":18},"originX":294.765625,"originY":0}'
         );
 
         foreach( $properties as $i => $returnVal )
@@ -591,6 +584,6 @@ class CaptionTest extends \PHPUnit_Framework_TestCase
 
         $object->annotateImage();
 
-        $this->assertEquals( 19, $object->getFontSize() );
+        $this->assertEquals( 21, $object->getFontSize() );
     }
 }

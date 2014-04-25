@@ -230,7 +230,7 @@ class Image
                 $this->bottomCaption->annotateImage();
 
             $image->setImageFormat( "jpg" );
-            $image->setCompression( Imagick::COMPRESSION_JPEG );
+            //$image->setCompression( Imagick::COMPRESSION_JPEG );
             $image->setCompressionQuality( 70 );
 
             $this->output->upload( $image );
